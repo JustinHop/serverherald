@@ -60,17 +60,14 @@ class RSNGCSNotify:
         if not accounts or not accounts.keys():
             print 'There are no accounts configured in the config file'
             sys.exit(1)
-        
+
         for account, settings in accounts.iteritems():
-          if 'apiKey' not in settings:
-              print 'Account %s does not have an API key' % account
-              sys.exit(1)
-          if 'endpoint' not in settings:
-              print 'Account %s does not have an auth endpoint' % account
-              sys.exit(1)
-              
-        print 'CALEB'
-        sys.exit(0)
+            if 'apiKey' not in settings:
+                print 'Account %s does not have an API key' % account
+                sys.exit(1)
+            if 'endpoint' not in settings:
+                print 'Account %s does not have an auth endpoint' % account
+                sys.exit(1)
 
     def notify(self, server):
         if self.silent:
