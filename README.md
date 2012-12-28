@@ -44,12 +44,12 @@ This script is written in Python. It requires Python 2.6 or Python 2.7 and multi
   * os
   * smtplib
   * getpass
+  * argparse
   * email
-  * optparse
   
 ### Red Hat / CentOS
  
-1. Install the EPEL repository: `rpm -ivh http://mirror.us.leaseweb.net/epel/6/i386/epel-release-6-8.noarch.rpm`
+1. Install the EPEL repository: `rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm`
 1. Install Python virtualenv: `yum install python-virtualenv`
 1. Create a Python virtualnv: `cd; virtualenv rax-nextgen-notify`
 1. Activate the virtualenv: `cd rax-nextgen-notify; . bin/activate`
@@ -80,7 +80,6 @@ The configuration file is in YAML format. See the following links for more infor
 
 * [PyYAML](http://pyyaml.org/wiki/PyYAMLDocumentation#YAMLsyntax)
 * [YAML Spec](http://yaml.org/spec/1.1/#id857168)
-* [YAML Cookbook](http://yaml4r.sourceforge.net/cookbook/)
 
 #### Example Configuration
 
@@ -119,6 +118,16 @@ See `python rax-nextgen-notify.py -h`
 ---
 
 ## FAQ
+
+### How often should I configure the cron job for?
+
+That is completely up to you. The more frequently the script runs, the sooner you will be notified when the cloud server is up and in ACTIVE status. It is not recommended to use anything less than 5 minutes.
+
+The more often the cron job runs the more API calls you use. Use the lowest value that doesn't impact your API usage and that maximizes the amount of time that can go between polling.
+
+#### Sample Cron Entry
+
+    */5 * * * * /home/user/rax-nextgen-notify/cron.sh
 
 ### Do I have to use Python virtualenv?
 

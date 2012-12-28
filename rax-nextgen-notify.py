@@ -1,4 +1,24 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright 2012 Rackspace
+# All Rights Reserved.
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
+"""
+A script intended to be run via cron for sending notification emails as new
+Rackspace NextGen cloud servers become ACTIVE.
+"""
 
 import pyrax
 import yaml
@@ -7,13 +27,25 @@ import sys
 import os
 import smtplib
 import getpass
+import argparse
 from email.mime.text import MIMEText
-from optparse import OptionParser
 
 
 class RSNGCSNotify:
 
+    """Class for querying current cloud servers and sending email
+    notifications for new servers
+    """
+
     def __init__(self, silent=False):
+        """Initialize the class by setting the path to the config file,
+        checking file and directory locations and parsing the config file
+
+        silent (boolean) specifies whether or not to send email notifications
+        (optional)
+
+        """
+
         self.silent = silent
 
         self.configFile = os.path.join(os.path.dirname(
@@ -23,6 +55,12 @@ class RSNGCSNotify:
         self.loadConfig()
 
     def checkFiles(self):
+        """Check for the existence of the config.yaml file and validate that
+        we can write to to the directory where the script lives for
+        purposes of the cache file that will
+        be created.
+        """
+
         if not os.path.isfile(self.configFile):
             print 'The config file does not exist at %s' % self.configFile
             sys.exit(1)
@@ -40,6 +78,9 @@ class RSNGCSNotify:
             sys.exit(1)
 
     def loadConfig(self):
+        """Load the config.yaml file and validate it's contents within
+        reason"""
+
         with open(self.configFile) as f:
             self.config = yaml.load(f)
 
@@ -70,6 +111,12 @@ class RSNGCSNotify:
                 sys.exit(1)
 
     def notify(self, server):
+        """Send notification emails as configured in config.yaml for an
+        individual server
+
+        server (dict) A dictionary of server values to populate the email with
+        """
+
         if self.silent:
             return
 
@@ -116,6 +163,9 @@ UK: 0800-083-3012""" % server
         s.quit()
 
     def checkForServers(self):
+        """Check all regions for an Auth endpoint querying for all servers,
+        sending notifications for new servers in ACTIVE status
+        """
         serversFile = os.path.join(os.path.dirname(
                         os.path.realpath(__file__)), 'servers.json')
         if not os.path.isfile(serversFile):
@@ -168,19 +218,22 @@ UK: 0800-083-3012""" % server
             json.dump(servers, f)
 
 
-if __name__ == '__main__':
+def main():
     description = """A script intended to be run via cron for sending
 notification emails as new Rackspace NextGen cloud servers become ACTIVE.
---------------------------------------------------------------------------"""
+---------------------------------------------------------------------------"""
 
-    parser = OptionParser(description=description)
+    parser = argparse.ArgumentParser(description=description)
 
-    parser.add_option('-s', '--silent', action='store_true', default=False,
-                      help='Run silently, not sending any notification ' \
-                           'emails. Useful for the initial run to build a ' \
-                           'baseline of current servers')
+    parser.add_argument('-s', '--silent', action='store_true', default=False,
+                        help='Run silently, not sending any notification ' \
+                             'emails. Useful for the initial run to build ' \
+                             'a baseline of current servers')
 
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
-    notify = RSNGCSNotify(options.silent)
+    notify = RSNGCSNotify(silent=args.silent)
     notify.checkForServers()
+
+if __name__ == '__main__':
+    main()
