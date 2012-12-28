@@ -107,9 +107,6 @@ class RSNGCSNotify:
             if 'apiKey' not in settings:
                 print 'Account %s does not have an API key' % account
                 sys.exit(1)
-            if 'endpoint' not in settings:
-                print 'Account %s does not have an auth endpoint' % account
-                sys.exit(1)
 
     def notify(self, server):
         """Send notification emails as configured in config.yaml for an
@@ -206,11 +203,11 @@ UK: 0800-083-3012""" % server
             with open(serversFile) as f:
                 lastServers = json.load(f)
         servers = {}
-        for username, details in self.config['accounts'].items():
-            endpoint = details.get('region', 'DFW')
+        for username, settings in self.config['accounts'].iteritems():
+            endpoint = settings.get('endpoint', 'US')
             if endpoint == 'LON':
                 pyrax.default_region = 'LON'
-            pyrax.set_credentials(username, details.get('apiKey'))
+            pyrax.set_credentials(username, settings.get('apiKey'))
             if pyrax.identity.auth_endpoint == pyrax.identity.uk_auth_endpoint:
                 regions = ['LON']
             else:
