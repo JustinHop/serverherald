@@ -15,6 +15,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+"""
+A script intended to be run via cron for sending notification emails as new Rackspace NextGen cloud servers become ACTIVE.
+"""
+
 import pyrax
 import yaml
 import json
@@ -26,7 +30,16 @@ import argparse
 from email.mime.text import MIMEText
 
 class RSNGCSNotify:
+    """Class for querying current cloud servers and sending email notifications for new servers"""
+
     def __init__(self, silent=False):
+        """Initialize the class by setting the path to the config file,
+        checking file and directory locations and parsing the config file
+
+        silent (boolean) specifies whether or not to send email notifications (optional)
+
+        """
+
         self.silent = silent
 
         self.configFile = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.yaml')
@@ -36,6 +49,12 @@ class RSNGCSNotify:
 
 
     def checkFiles(self):
+        """Check for the existence of the config.yaml file and validate that we can write to
+        to the directory where the script lives for purposes of the cache file that will
+        be created.
+
+        """
+
         if not os.path.isfile(self.configFile):
             print 'The config file does not exist at %s' % self.configFile
             sys.exit(1)
@@ -51,6 +70,8 @@ class RSNGCSNotify:
 
 
     def loadConfig(self):
+        """Load the config.yaml file and validate it's contents within reason"""
+
         with open(self.configFile) as f:
             self.config = yaml.load(f)
 
@@ -74,6 +95,12 @@ class RSNGCSNotify:
 
 
     def notify(self, server):
+        """Send notification emails as configured in config.yaml for an individual server
+
+        server (dict) A dictionary of server values to populate the email with
+
+        """
+
         if self.silent:
             return
 
@@ -117,6 +144,11 @@ UK: 0800-083-3012""" % server
 
 
     def checkForServers(self):
+        """Check all regions for an Auth endpoint querying for all servers, sending notifications
+        for new servers in ACTIVE status
+
+        """
+
         serversFile = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'servers.json')
         if not os.path.isfile(serversFile):
             lastServers = {}
@@ -163,7 +195,7 @@ UK: 0800-083-3012""" % server
             json.dump(servers, f)
 
 
-if __name__ == '__main__':
+def main():
     description = """A script intended to be run via cron for sending notification emails
 as new Rackspace NextGen cloud servers become ACTIVE.
 ------------------------------------------------------------------------------"""
@@ -177,3 +209,8 @@ as new Rackspace NextGen cloud servers become ACTIVE.
 
     notify = RSNGCSNotify(silent=args.silent)
     notify.checkForServers()
+
+
+if __name__ == '__main__':
+    main()
+
