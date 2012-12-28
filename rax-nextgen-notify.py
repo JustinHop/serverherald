@@ -213,4 +213,3 @@ as new Rackspace NextGen cloud servers become ACTIVE.
 
 if __name__ == '__main__':
     main()
-
