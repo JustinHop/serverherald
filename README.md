@@ -80,7 +80,6 @@ The configuration file is in YAML format. See the following links for more infor
 
 * [PyYAML](http://pyyaml.org/wiki/PyYAMLDocumentation#YAMLsyntax)
 * [YAML Spec](http://yaml.org/spec/1.1/#id857168)
-* [YAML Cookbook](http://yaml4r.sourceforge.net/cookbook/)
 
 #### Example Configuration
 
