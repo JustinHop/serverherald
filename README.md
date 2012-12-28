@@ -124,6 +124,8 @@ See `python rax-nextgen-notify.py -h`
 
 That is completely up to you. The more frequently the script runs, the sooner you will be notified when the cloud server is up and in ACTIVE status. It is not recommended to use anything less than 5 minutes.
 
+The more often the cron job runs the more API calls you use. Use the lowest value that doesn't impact your API usage and that maximizes the amount of time that can go between polling.
+
 #### Sample Cron Entry
 
     */5 * * * * /home/user/rax-nextgen-notify/cron.sh
