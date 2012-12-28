@@ -48,6 +48,7 @@ This script is written in Python. It requires Python 2.6 or Python 2.7 and multi
 
 * [pyrax](https://github.com/rackspace/pyrax)
 * [PyYAML](http://pyyaml.org/)
+* [requests](http://docs.python-requests.org/en/latest/)
 * Standard Modules (Should be included in the default Python installation)
   * json
   * sys
@@ -56,26 +57,26 @@ This script is written in Python. It requires Python 2.6 or Python 2.7 and multi
   * getpass
   * argparse
   * email
-  
+
 ### Red Hat / CentOS
- 
+
 1. Install the EPEL repository: `rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm`
 1. Install Python virtualenv: `yum install python-virtualenv`
 1. Create a Python virtualnv: `cd; virtualenv rax-nextgen-notify`
 1. Activate the virtualenv: `cd rax-nextgen-notify; . bin/activate`
-1. Install the dependencies: `pip install PyYAML pyrax`
+1. Install the dependencies: `pip install PyYAML pyrax requests`
 1. Copy the downloaded rax-nextgen-notify.py and cron.sh files to the virtualenv created in step 3
 1. Make cron.sh executable: `chmod +x cron.sh`
 1. Create a config file as documented below
 1. For the first run the script with the -s flag: `python rax-nextgen-notify.py -s`
 1. Create a cronjob to run on the frequency you determine, that executes the cron.sh script
- 
+
 ### Ubuntu
 
 1. Install Python virtualenv: `sudo apt-get install python-virtualenv`
 2. Create a Python virtualenv: `cd; virtualenv rax-nextgen-notify`
 1. Activate the virtualenv: `cd rax-nextgen-notify; . bin/activate`
-1. Install the dependencies: `pip install PyYAML pyrax`
+1. Install the dependencies: `pip install PyYAML pyrax requests`
 1. Copy the downloaded rax-nextgen-notify.py and cron.sh files to the virtualenv created in step 2
 1. Make cron.sh executable: `chmod +x cron.sh`
 1. Create a config file as documented below

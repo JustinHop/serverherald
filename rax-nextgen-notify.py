@@ -22,6 +22,7 @@ Rackspace NextGen cloud servers become ACTIVE.
 
 import pyrax
 import yaml
+import requests
 import json
 import sys
 import os
@@ -122,6 +123,8 @@ class RSNGCSNotify:
 
         if not isinstance(self.config['email']['to'], list):
             self.config['email']['to'] = [self.config['email']['to']]
+
+        subject = 'New Cloud Server Online'
         message = """New cloud server online.
 
 Cloud Server: %(name)s
@@ -152,15 +155,44 @@ The Rackspace Cloud
 US Toll Free: 1.877.934.0407
 International: +1.210.581.0407
 UK: 0800-083-3012""" % server
-        email = MIMEText(message)
-        email['Subject'] = 'New Cloud Server Online'
-        email['From'] = self.config['email']['from']
-        email['To'] = ', '.join(self.config['email']['to'])
-        s = smtplib.SMTP()
-        s.connect()
-        s.sendmail(email['From'], self.config['email']['to'],
-                   email.as_string())
-        s.quit()
+
+        if self.config['email'].get('send_using') == 'mailgun':
+            if self.config['email'].get('mailgun_smtp'):
+                email = MIMEText(message)
+                email['Subject'] = subject
+                email['From'] = self.config['email']['from']
+                email['To'] = ', '.join(self.config['email']['to'])
+                s = smtplib.SMTP_SSL('smtp.mailgun.org', 465)
+                s.connect('smtp.mailgun.org', 465)
+                username = self.config['email'].get('mailgun_user')
+                domain = self.config['email'].get('mailgun_domain')
+                username = username.split('@')[0]
+                username = '%s@%s' % (username, domain)
+                s.login(username,
+                        self.config['email'].get('mailgun_pass'))
+                s.sendmail(email['From'], self.config['email']['to'],
+                           email.as_string())
+                s.quit()
+            else:
+                requests.post(
+                    'https://api.mailgun.net/v2/%s/messages' %
+                    self.config['email'].get('mailgun_domain'),
+                    auth=('api', self.config['email'].get('mailgun_apiKey')),
+                    data={
+                        'from': self.config['email']['from'],
+                        'to': self.config['email']['to'],
+                        'subject': subject,
+                        'text': message})
+        else:
+            email = MIMEText(message)
+            email['Subject'] = subject
+            email['From'] = self.config['email']['from']
+            email['To'] = ', '.join(self.config['email']['to'])
+            s = smtplib.SMTP()
+            s.connect()
+            s.sendmail(email['From'], self.config['email']['to'],
+                       email.as_string())
+            s.quit()
 
     def checkForServers(self):
         """Check all regions for an Auth endpoint querying for all servers,
