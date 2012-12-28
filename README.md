@@ -49,7 +49,7 @@ This script is written in Python. It requires Python 2.6 or Python 2.7 and multi
   
 ### Red Hat / CentOS
  
-1. Install the EPEL repository: `rpm -ivh http://mirror.us.leaseweb.net/epel/6/i386/epel-release-6-8.noarch.rpm`
+1. Install the EPEL repository: `rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm`
 1. Install Python virtualenv: `yum install python-virtualenv`
 1. Create a Python virtualnv: `cd; virtualenv rax-nextgen-notify`
 1. Activate the virtualenv: `cd rax-nextgen-notify; . bin/activate`
