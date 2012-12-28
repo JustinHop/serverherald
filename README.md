@@ -32,6 +32,8 @@ All future runs can drop the silent option so that notifications are sent for ne
 
     $ ./rax-nextgen-notify.py
 
+---
+
 ## Installation
 
 This script is written in Python. It requires Python 2.6 or Python 2.7 and multiple dependencies. It is recommended to install this inside of a Python virtual environment.
@@ -108,7 +110,6 @@ The configuration file is in YAML format. See the following links for more infor
         endpoint: LON
 
 ---
-
 
 ## FAQ
 
