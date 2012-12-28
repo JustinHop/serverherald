@@ -22,9 +22,17 @@ Coming Soon
 
 ---
 
-## Installation
+## Usage
 
-### TL;DR
+For your first run, enable the silent switch so that `rax-nextgen-notify.py` can learn about your existing servers:
+
+    $ ./rax-nextgen-notify.py --silent
+
+All future runs can drop the silent option so that notifications are sent for new servers.
+
+    $ ./rax-nextgen-notify.py
+
+## Installation
 
 This script is written in Python. It requires Python 2.6 or Python 2.7 and multiple dependencies. It is recommended to install this inside of a Python virtual environment.
 
@@ -101,21 +109,6 @@ The configuration file is in YAML format. See the following links for more infor
 
 ---
 
-## Usage
-
-See `python rax-nextgen-notify.py -h`
-
-    Usage: rax-nextgen-notify.py [options]
-    
-    A script intended to be run via cron for sending notification emails as new
-    Rackspace NextGen cloud servers become ACTIVE.
-    ------------------------------------------------------------------------------
-    
-    Options:
-      -h, --help    show this help message and exit
-      -s, --silent  Run silently, not sending any notification emails. Useful for
-                    the initial run to build a baseline of current servers
----
 
 ## FAQ
 
