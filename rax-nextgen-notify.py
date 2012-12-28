@@ -49,7 +49,7 @@ class RSNGCSNotify:
 
         email = self.config.get('email')
         if not email or not email.get('to'):
-            print 'There are no email addresses configured in the config file'
+            print 'There are no recipient email addresses in the config file'
             sys.exit(1)
 
         if not email.get('from'):
@@ -60,6 +60,17 @@ class RSNGCSNotify:
         if not accounts or not accounts.keys():
             print 'There are no accounts configured in the config file'
             sys.exit(1)
+        
+        for account, settings in accounts.iteritems():
+          if 'apiKey' not in settings:
+              print 'Account %s does not have an API key' % account
+              sys.exit(1)
+          if 'endpoint' not in settings:
+              print 'Account %s does not have an auth endpoint' % account
+              sys.exit(1)
+              
+        print 'CALEB'
+        sys.exit(0)
 
     def notify(self, server):
         if self.silent:
