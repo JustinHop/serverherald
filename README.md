@@ -122,7 +122,11 @@ See `python rax-nextgen-notify.py -h`
 
 ### How often should I configure the cron job for?
 
-That is completely up to you. The more frequently the script runs, the sooner you will be notified when the cloud server is up and in ACTIVE status. I would not recommend anything less than 5 minutes.
+That is completely up to you. The more frequently the script runs, the sooner you will be notified when the cloud server is up and in ACTIVE status. It is not recommended to use anything less than 5 minutes.
+
+#### Sample Cron Entry
+
+    */5 * * * * /home/user/rax-nextgen-notify/cron.sh
 
 ### Do I have to use Python virtualenv?
 
