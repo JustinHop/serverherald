@@ -152,8 +152,6 @@ UK: 0800-083-3012""" % server
         serversFile = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'servers.json')
         if not os.path.isfile(serversFile):
             lastServers = {}
-            for username in self.config['accounts'].keys():
-                lastServers[username] = []
         else:
             with open(serversFile) as f:
                 lastServers = json.load(f)
@@ -182,6 +180,8 @@ UK: 0800-083-3012""" % server
                     flavor=filter(lambda x: int(x.id) == int(server.flavor['id']), flavors)[0].name
                     if username not in servers:
                         servers[username] = []
+                    if username not in lastServers:
+                        lastServers[username] = []
                     servers[username].append(id)
                     if status == 'ACTIVE' and id not in lastServers[username]:
                         self.notify(
