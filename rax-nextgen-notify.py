@@ -16,7 +16,8 @@
 #    under the License.
 
 """
-A script intended to be run via cron for sending notification emails as new Rackspace NextGen cloud servers become ACTIVE.
+A script intended to be run via cron for sending notification emails as new
+Rackspace NextGen cloud servers become ACTIVE.
 """
 
 import pyrax
@@ -29,48 +30,56 @@ import getpass
 import argparse
 from email.mime.text import MIMEText
 
+
 class RSNGCSNotify:
-    """Class for querying current cloud servers and sending email notifications for new servers"""
+
+    """Class for querying current cloud servers and sending email
+    notifications for new servers
+    """
 
     def __init__(self, silent=False):
         """Initialize the class by setting the path to the config file,
         checking file and directory locations and parsing the config file
 
-        silent (boolean) specifies whether or not to send email notifications (optional)
+        silent (boolean) specifies whether or not to send email notifications
+        (optional)
 
         """
 
         self.silent = silent
 
-        self.configFile = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.yaml')
+        self.configFile = os.path.join(os.path.dirname(
+                            os.path.realpath(__file__)), 'config.yaml')
 
         self.checkFiles()
         self.loadConfig()
 
-
     def checkFiles(self):
-        """Check for the existence of the config.yaml file and validate that we can write to
-        to the directory where the script lives for purposes of the cache file that will
+        """Check for the existence of the config.yaml file and validate that
+        we can write to to the directory where the script lives for
+        purposes of the cache file that will
         be created.
-
         """
 
         if not os.path.isfile(self.configFile):
             print 'The config file does not exist at %s' % self.configFile
             sys.exit(1)
 
-        testWriteFile = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'writetest')
+        testWriteFile = os.path.join(os.path.dirname(
+                          os.path.realpath(__file__)), 'writetest')
         try:
             with open(testWriteFile, 'w+') as f:
                 f.write('test')
             os.unlink(testWriteFile)
         except IOError:
-            print 'It does not appear that the user (%s) this script was executed as can write to\n%s' % (getpass.getuser(), os.path.dirname(testWriteFile))
+            print 'It does not appear that the user (%s) this script was ' \
+                  'executed as can write to\n%s' % (
+                    getpass.getuser(), os.path.dirname(testWriteFile))
             sys.exit(1)
 
-
     def loadConfig(self):
-        """Load the config.yaml file and validate it's contents within reason"""
+        """Load the config.yaml file and validate it's contents within
+        reason"""
 
         with open(self.configFile) as f:
             self.config = yaml.load(f)
@@ -81,7 +90,7 @@ class RSNGCSNotify:
 
         email = self.config.get('email')
         if not email or not email.get('to'):
-            print 'There are no email addresses configured in the config file'
+            print 'There are no recipient email addresses in the config file'
             sys.exit(1)
 
         if not email.get('from'):
@@ -93,12 +102,19 @@ class RSNGCSNotify:
             print 'There are no accounts configured in the config file'
             sys.exit(1)
 
+        for account, settings in accounts.iteritems():
+            if 'apiKey' not in settings:
+                print 'Account %s does not have an API key' % account
+                sys.exit(1)
+            if 'endpoint' not in settings:
+                print 'Account %s does not have an auth endpoint' % account
+                sys.exit(1)
 
     def notify(self, server):
-        """Send notification emails as configured in config.yaml for an individual server
+        """Send notification emails as configured in config.yaml for an
+        individual server
 
         server (dict) A dictionary of server values to populate the email with
-
         """
 
         if self.silent:
@@ -117,7 +133,9 @@ This server is accessible through the control panel at:
 
 https://mycloud.rackspace.com/a/%(username)s/#compute,cloudServersOpenStack,%(region)s/%(id)s
 
-Note: Your Cloud Server does not get backed up until you configure and schedule backups. To learn how, please visit the following knowledge base article:
+Note: Your Cloud Server does not get backed up until you configure and
+schedule backups. To learn how, please visit the following knowledge base
+article:
 
 http://www.rackspace.com/knowledge_center/index.php/Configuring_Backups
 
@@ -126,7 +144,8 @@ Knowledge Base: http://www.rackspace.com/knowledge_center/
 API Developer Guide: http://docs.rackspacecloud.com/servers/api/cs-devguide-latest.pdf
 Cloud Tools: http://www.rackspace.com/cloud/tools/
 
-If you have any questions or received this message in error, please let us know.
+If you have any questions or received this message in error, please let us
+know.
 
 Best Regards,
 The Rackspace Cloud
@@ -139,17 +158,16 @@ UK: 0800-083-3012""" % server
         email['To'] = ', '.join(self.config['email']['to'])
         s = smtplib.SMTP()
         s.connect()
-        s.sendmail(email['From'], self.config['email']['to'], email.as_string())
+        s.sendmail(email['From'], self.config['email']['to'],
+                   email.as_string())
         s.quit()
 
-
     def checkForServers(self):
-        """Check all regions for an Auth endpoint querying for all servers, sending notifications
-        for new servers in ACTIVE status
-
+        """Check all regions for an Auth endpoint querying for all servers,
+        sending notifications for new servers in ACTIVE status
         """
-
-        serversFile = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'servers.json')
+        serversFile = os.path.join(os.path.dirname(
+                        os.path.realpath(__file__)), 'servers.json')
         if not os.path.isfile(serversFile):
             lastServers = {}
             for username in self.config['accounts'].keys():
@@ -163,7 +181,11 @@ UK: 0800-083-3012""" % server
             if endpoint == 'LON':
                 pyrax.default_region = 'LON'
             pyrax.set_credentials(username, details.get('apiKey'))
-            regions = ['LON'] if pyrax.identity.auth_endpoint == pyrax.identity.uk_auth_endpoint else ['DFW', 'ORD']
+            if pyrax.identity.auth_endpoint == pyrax.identity.uk_auth_endpoint:
+                regions = ['LON']
+            else:
+                regions = ['DFW', 'ORD']
+
             for region in regions:
                 try:
                     cs = pyrax.connect_to_cloudservers(region)
@@ -174,42 +196,44 @@ UK: 0800-083-3012""" % server
                 for server in cs.servers.list():
                     id = server.id
                     status = server.status
-                    ips = ', '.join([ver['addr'] for ver in server.addresses['public']])
+                    public_ips = server.addresses['public']
+                    ips = ', '.join([ver['addr'] for ver in public_ips])
                     try:
-                        image=filter(lambda x: x.id == server.image['id'], images)[0].name
+                        image = filter(lambda x: x.id == server.image['id'],
+                                                         images)[0].name
                     except IndexError:
                         image = cs.images.get(server.image['id']).name
-                    flavor=filter(lambda x: int(x.id) == int(server.flavor['id']), flavors)[0].name
+                    flavor = filter(lambda x: int(x.id) == int(
+                                      server.flavor['id']), flavors)[0].name
                     if username not in servers:
                         servers[username] = []
                     servers[username].append(id)
                     if status == 'ACTIVE' and id not in lastServers[username]:
                         self.notify(
-                            dict(
-                                id=id, status=status, name=server.name, image=image,
-                                flavor=flavor, ips=ips, username=username, region=region
-                            )
-                        )
+                            dict(id=id, status=status, name=server.name,
+                                 image=image, flavor=flavor, ips=ips,
+                                 username=username, region=region))
 
         with open(serversFile, 'wb+') as f:
             json.dump(servers, f)
 
 
 def main():
-    description = """A script intended to be run via cron for sending notification emails
-as new Rackspace NextGen cloud servers become ACTIVE.
-------------------------------------------------------------------------------"""
+    description = """A script intended to be run via cron for sending
+notification emails as new Rackspace NextGen cloud servers become ACTIVE.
+---------------------------------------------------------------------------"""
 
     parser = argparse.ArgumentParser(description=description)
 
     parser.add_argument('-s', '--silent', action='store_true', default=False,
-                      help='Run silently, not sending any notification emails. Useful for the initial run to build a baseline of current servers')
+                        help='Run silently, not sending any notification ' \
+                             'emails. Useful for the initial run to build ' \
+                             'a baseline of current servers')
 
     args = parser.parse_args()
 
     notify = RSNGCSNotify(silent=args.silent)
     notify.checkForServers()
-
 
 if __name__ == '__main__':
     main()
