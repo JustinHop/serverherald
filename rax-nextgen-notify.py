@@ -155,21 +155,10 @@ UK: 0800-083-3012""" % server
 
         if self.config['email'].get('send_using') == 'mailgun':
             if self.config['email'].get('mailgun_smtp'):
-                email = MIMEText(message)
-                email['Subject'] = subject
-                email['From'] = self.config['email']['from']
-                email['To'] = ', '.join(self.config['email']['to'])
-                s = smtplib.SMTP_SSL('smtp.mailgun.org', 465)
-                s.connect('smtp.mailgun.org', 465)
                 username = self.config['email'].get('mailgun_user')
                 domain = self.config['email'].get('mailgun_domain')
                 username = username.split('@')[0]
                 username = '%s@%s' % (username, domain)
-                s.login(username,
-                        self.config['email'].get('mailgun_pass'))
-                s.sendmail(email['From'], self.config['email']['to'],
-                           email.as_string())
-                s.quit()
             else:
                 requests.post(
                     'https://api.mailgun.net/v2/%s/messages' %
@@ -185,8 +174,14 @@ UK: 0800-083-3012""" % server
             email['Subject'] = subject
             email['From'] = self.config['email']['from']
             email['To'] = ', '.join(self.config['email']['to'])
-            s = smtplib.SMTP()
-            s.connect()
+            if self.config['email'].get('mailgun_smtp'):
+                s = smtplib.SMTP_SSL('smtp.mailgun.org', 465)
+                s.connect('smtp.mailgun.org', 465)
+                s.login(username,
+                        self.config['email'].get('mailgun_pass'))
+            else:
+                s = smtplib.SMTP()
+                s.connect()
             s.sendmail(email['From'], self.config['email']['to'],
                        email.as_string())
             s.quit()
