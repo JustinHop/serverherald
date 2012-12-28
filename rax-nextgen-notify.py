@@ -7,8 +7,8 @@ import sys
 import os
 import smtplib
 import getpass
+import argparse
 from email.mime.text import MIMEText
-from optparse import OptionParser
 
 class RSNGCSNotify:
     def __init__(self, silent=False):
@@ -153,12 +153,12 @@ if __name__ == '__main__':
 as new Rackspace NextGen cloud servers become ACTIVE.
 ------------------------------------------------------------------------------"""
 
-    parser = OptionParser(description=description)
+    parser = argparse.ArgumentParser(description=description)
 
-    parser.add_option('-s', '--silent', action='store_true', default=False,
+    parser.add_argument('-s', '--silent', action='store_true', default=False,
                       help='Run silently, not sending any notification emails. Useful for the initial run to build a baseline of current servers')
 
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
-    notify = RSNGCSNotify(options.silent)
+    notify = RSNGCSNotify(silent=args.silent)
     notify.checkForServers()

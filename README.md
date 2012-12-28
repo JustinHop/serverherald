@@ -44,8 +44,8 @@ This script is written in Python. It requires Python 2.6 or Python 2.7 and multi
   * os
   * smtplib
   * getpass
+  * argparse
   * email
-  * optparse
   
 ### Red Hat / CentOS
  
