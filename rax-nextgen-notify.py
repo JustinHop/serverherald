@@ -223,8 +223,11 @@ UK: 0800-083-3012""" % server
                 for server in cs.servers.list():
                     id = server.id
                     status = server.status
-                    public_ips = server.addresses['public']
-                    ips = ', '.join([ver['addr'] for ver in public_ips])
+                    public_ips = server.addresses.get('public')
+                    if public_ips:
+                        ips = ', '.join([ver['addr'] for ver in public_ips])
+                    else:
+                        ips = 'None'
                     try:
                         image = filter(lambda x: x.id == server.image['id'],
                                        images)[0].name
