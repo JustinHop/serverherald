@@ -49,7 +49,7 @@ class RSNGCSNotify:
         self.silent = silent
 
         self.configFile = os.path.join(os.path.dirname(
-                            os.path.realpath(__file__)), 'config.yaml')
+            os.path.realpath(__file__)), 'config.yaml')
 
         self.checkFiles()
         self.loadConfig()
@@ -66,7 +66,7 @@ class RSNGCSNotify:
             sys.exit(1)
 
         testWriteFile = os.path.join(os.path.dirname(
-                          os.path.realpath(__file__)), 'writetest')
+            os.path.realpath(__file__)), 'writetest')
         try:
             with open(testWriteFile, 'w+') as f:
                 f.write('test')
@@ -74,7 +74,7 @@ class RSNGCSNotify:
         except IOError:
             print 'It does not appear that the user (%s) this script was ' \
                   'executed as can write to\n%s' % (
-                    getpass.getuser(), os.path.dirname(testWriteFile))
+                  getpass.getuser(), os.path.dirname(testWriteFile))
             sys.exit(1)
 
     def loadConfig(self):
@@ -167,7 +167,7 @@ UK: 0800-083-3012""" % server
         sending notifications for new servers in ACTIVE status
         """
         serversFile = os.path.join(os.path.dirname(
-                        os.path.realpath(__file__)), 'servers.json')
+            os.path.realpath(__file__)), 'servers.json')
         if not os.path.isfile(serversFile):
             lastServers = {}
         else:
@@ -198,11 +198,11 @@ UK: 0800-083-3012""" % server
                     ips = ', '.join([ver['addr'] for ver in public_ips])
                     try:
                         image = filter(lambda x: x.id == server.image['id'],
-                                                         images)[0].name
+                                       images)[0].name
                     except IndexError:
                         image = cs.images.get(server.image['id']).name
                     flavor = filter(lambda x: int(x.id) == int(
-                                      server.flavor['id']), flavors)[0].name
+                                    server.flavor['id']), flavors)[0].name
                     if username not in servers:
                         servers[username] = []
                     if username not in lastServers:
@@ -226,8 +226,8 @@ notification emails as new Rackspace NextGen cloud servers become ACTIVE.
     parser = argparse.ArgumentParser(description=description)
 
     parser.add_argument('-s', '--silent', action='store_true', default=False,
-                        help='Run silently, not sending any notification ' \
-                             'emails. Useful for the initial run to build ' \
+                        help='Run silently, not sending any notification '
+                             'emails. Useful for the initial run to build '
                              'a baseline of current servers')
 
     args = parser.parse_args()
