@@ -1,5 +1,5 @@
 import smtplib
-#from email.mime.text import MIMEText
+from email.mime.text import MIMEText
 
 from serverherald.methods.mail import RSNGCSNotifyEmail
 
