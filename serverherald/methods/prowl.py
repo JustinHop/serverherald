@@ -20,7 +20,7 @@ class RSNGCSNotifyProwl(RSNGCSNotify):
         if not prowlconfig.get('apikey'):
             print 'Prowl requires an API key in the config file'
             sys.exit(1)
-    
+
     def get_message(self, context):
         template = self.template_env.get_template('prowl')
         return template.render(context)
@@ -33,7 +33,8 @@ class RSNGCSNotifyProwl(RSNGCSNotify):
         url = 'https://api.prowlapp.com/publicapi/add'
         r = requests.post(url,
                           data={'apikey': self.config['prowl'].get('apikey'),
-                                'priority': self.config['prowl'].get('priority', 0),
+                                'priority':
+                                self.config['prowl'].get('priority', 0),
                                 'application': 'Server Herald',
                                 'event': 'New Server',
                                 'description': message})
