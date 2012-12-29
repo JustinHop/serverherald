@@ -1,3 +1,4 @@
+import sys
 import requests
 
 from serverherald.methods.mail import RSNGCSNotifyEmail
