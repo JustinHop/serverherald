@@ -87,6 +87,15 @@ SMTP notifications via Mailgun:
       myclouduser1:
         apikey: db2132af5dc3125f9c688661fefab621
 
+iOS push notifications via Prowl:
+
+    method: prowl
+    prowl:
+      apikey: 6d708e45a377d3f4421542217c282a55
+    accounts:
+      myclouduser1:
+        apikey: db2132af5dc3125f9c688661fefab621
+
 ## Deployment
 
 serverherald should be used to poll the Rackspace Cloud Servers API on
