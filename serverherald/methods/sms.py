@@ -1,4 +1,4 @@
-from serverherald.methods.email import RSNGCSNotify
+from serverherald.methods.base import RSNGCSNotify
 
 
 class RSNGCSNotifySMS(RSNGCSNotify):

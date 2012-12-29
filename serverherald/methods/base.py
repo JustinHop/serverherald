@@ -26,9 +26,8 @@ class RSNGCSNotify:
 
         self.check_files()
         self.validate_config()
-        self.template_env = Environment(
-                              loader=PackageLoader('serverherald',
-                              'templates'))
+        self.template_env = Environment(loader=PackageLoader('serverherald',
+                                        'templates'))
 
     def check_files(self):
         """Check for the existence of the config.yaml file and validate that
@@ -115,12 +114,11 @@ class RSNGCSNotify:
                         last_servers[username] = []
                     servers[username].append(id)
                     if status == 'ACTIVE' and id not in last_servers[username]:
-                        context = {'id': id, 'status': status, 'server': server,
-                                   'server_image': image, 'flavor': flavor,
-                                   'server_ips': ips, 'username': username,
-                                   'region': region}
+                        context = {'id': id, 'status': status,
+                                   'server': server, 'server_image': image,
+                                   'flavor': flavor, 'server_ips': ips,
+                                   'username': username, 'region': region}
                         self.notify(context)
-
 
         with open(servers_file, 'wb+') as f:
             json.dump(servers, f)

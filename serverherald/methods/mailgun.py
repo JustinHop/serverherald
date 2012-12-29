@@ -8,7 +8,7 @@ class RSNGCSNotifyMailgun(RSNGCSNotifyEmail):
 
     def validate_config(self):
         RSNGCSNotifyEmail.validate_config(self)
-        
+
         # Mailgun requires a domain name and API key
         mgconfig = self.config.get('mailgun')
         if not mgconfig:
@@ -30,7 +30,7 @@ class RSNGCSNotifyMailgun(RSNGCSNotifyEmail):
 
         message = self.get_message(context)
         url = 'https://api.mailgun.net/v2/%s/messages' % \
-                self.config['mailgun'].get('domain')
+            self.config['mailgun'].get('domain')
         r = requests.post(url,
                           auth=('api', self.config['mailgun'].get('apikey')),
                           data={'from': self.config['email']['from'],
@@ -39,4 +39,3 @@ class RSNGCSNotifyMailgun(RSNGCSNotifyEmail):
                                 'text': message})
         if r.status_code != 200:
             print 'Mailgun API Error: (%d) %s' % (r.status_code, r.text)
-      
