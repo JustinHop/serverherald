@@ -81,6 +81,7 @@ server become ACTIVE.
     # Dynamically determine the proper class for the notification method
     methods = {'smtp': 'RSNGCSNotifySMTP',
                'mailgun': 'RSNGCSNotifyMailgun',
+               'sendgrid': 'RSNGCSNotifySendgrid',
                'prowl': 'RSNGCSNotifyProwl',
                'webhook': 'RSNGCSNotifyWebhook',
                'pagerduty': 'RSNGCSNotifyPagerduty',

@@ -21,9 +21,8 @@ new servers.
 serverherald has a pluggable notification system that currently supports the
 following methods:
 
-* Email using a local SMTP service
-* Email using the [Mailgun](http://www.mailgun.com/) API
-* SMS via the [Twilio](http://www.twilio.com/) or [Nexmo](http://nexmo.com/)
+* Email (SMTP, [Mailgun](http://www.mailgun.com/), or [Sendgrid](http://sendgrid.com))
+* SMS ([Twilio](http://www.twilio.com/) or [Nexmo](http://nexmo.com/))
 * iOS push notifications via [Prowl](http://www.prowlapp.com/)
 * [PagerDuty](http://www.pagerduty.com/) event trigger
 * Custom HTTP(S) webhook
