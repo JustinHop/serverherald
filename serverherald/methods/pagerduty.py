@@ -6,7 +6,7 @@ from serverherald.methods.base import RSNGCSNotify
 
 
 class RSNGCSNotifyPagerduty(RSNGCSNotify):
-    """Class for sending push notifications via PagerDuty API"""
+    """Class for sending event notifications via PagerDuty API"""
 
     def validate_config(self):
         RSNGCSNotify.validate_config(self)
