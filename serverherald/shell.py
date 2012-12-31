@@ -82,7 +82,8 @@ server become ACTIVE.
     methods = {'smtp': 'RSNGCSNotifySMTP',
                'mailgun': 'RSNGCSNotifyMailgun',
                'sms': 'RSNGCSNotifySMS',
-               'prowl': 'RSNGCSNotifyProwl'}
+               'prowl': 'RSNGCSNotifyProwl',
+               'webhook': 'RSNGCSNotifyWebhook'}
     notify = getattr(serverherald.methods,
                      methods[config['method']])(config, silent=args.silent)
     notify.check_servers()

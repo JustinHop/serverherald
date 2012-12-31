@@ -117,6 +117,7 @@ class RSNGCSNotify:
                         context = {'id': id, 'status': status,
                                    'server': server, 'server_image': image,
                                    'flavor': flavor, 'server_ips': ips,
+                                   'server_ips_list': public_ips,
                                    'username': username, 'region': region}
                         self.notify(context)
 

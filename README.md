@@ -1,8 +1,8 @@
 # serverherald
 
 serverherald announces when a new Rackspace OpenStack Cloud Server becomes
-ACTIVE. It supports multiple notification methods, with email being the most
-popular.
+ACTIVE by polling the API. It supports multiple notification methods, with
+email being the most popular.
 
 ## Usage
 
@@ -16,9 +16,24 @@ new servers.
 
     $ serverherald
 
+## Notification Methods
+
+serverherald has a pluggable notification system that currently supports the
+following methods:
+
+* Email using a local SMTP service
+* Email using the Mailgun API
+* iOS push notifications via Prowl
+* Custom HTTP(S) webhook
+
+The `method` directive in the configuration file determines how serverherald
+sends notifications.
+
 ## Installation
 
-serverherald is written in Python. It requires Python 2.6 or Python 2.7 and multiple dependencies. It is recommended to install this inside of a Python virtual environment.
+serverherald is written in Python. It requires Python 2.6 or Python 2.7 and
+multiple dependencies. It is recommended to install this inside of a Python
+virtual environment.
 
 ### Red Hat / CentOS
 
@@ -95,6 +110,16 @@ iOS push notifications via Prowl:
     accounts:
       myclouduser1:
         apikey: db2132af5dc3125f9c688661fefab621
+
+Custom HTTP or HTTPS webhook notifications:
+
+    method: webhook
+    webhook:
+      url: http://example.com/notify-me
+    accounts:
+      myclouduser1:
+        apikey: db2132af5dc3125f9c688661fefab621
+
 
 ## Deployment
 
