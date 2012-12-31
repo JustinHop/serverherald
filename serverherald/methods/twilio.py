@@ -32,7 +32,7 @@ class RSNGCSNotifyTwilio(RSNGCSNotify):
                 sys.exit(1)
 
     def get_message(self, context):
-        template = self.template_env.get_template('twilio')
+        template = self.template_env.get_template('sms')
         return template.render(context)
 
     def notify(self, context):
