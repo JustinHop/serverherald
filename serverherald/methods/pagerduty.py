@@ -15,7 +15,7 @@ class RSNGCSNotifyPagerduty(RSNGCSNotify):
         pdconfig = self.config.get('pagerduty')
         if not pdconfig:
             print '`pagerduty` notification type requires a PagerDuty API ' \
-                  'key to bespecified in the config file.'
+                  'key to be specified in the config file.'
             sys.exit(1)
 
         if not pdconfig.get('apikey'):
