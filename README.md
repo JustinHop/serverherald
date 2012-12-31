@@ -70,7 +70,7 @@ search these locations and select the first file that exists:
 
 ### Example Configurations
 
-SMTP notifications via a local mail server:
+Email notifications via a local SMTP server:
 
     method: smtp
     email:
@@ -89,7 +89,7 @@ SMTP notifications via a local mail server:
         apikey: 6d708e45a377d3f4421542217c282a22
         endpoint: LON
 
-SMTP notifications via Mailgun:
+Email notifications via Mailgun:
 
     method: mailgun
     mailgun:
@@ -99,6 +99,20 @@ SMTP notifications via Mailgun:
       to:
         - you@yourcompany.com
     from: Server Herald <noreply@yourcompany.com>
+    accounts:
+      myclouduser1:
+        apikey: db2132af5dc3125f9c688661fefab621
+
+Email notifications via Sendgrid:
+
+    method: sendgrid
+    sendgrid:
+      apikey: 1234567890
+      apiuser: myusername
+    email:
+      to:
+        - you@yourcompany.com
+    from: noreply@yourcompany.com
     accounts:
       myclouduser1:
         apikey: db2132af5dc3125f9c688661fefab621
