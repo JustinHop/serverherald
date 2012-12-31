@@ -22,8 +22,9 @@ serverherald has a pluggable notification system that currently supports the
 following methods:
 
 * Email using a local SMTP service
-* Email using the Mailgun API
-* iOS push notifications via Prowl
+* Email using the [Mailgun](http://www.mailgun.com/) API
+* iOS push notifications via [Prowl](http://www.prowlapp.com/)
+* [PagerDuty](http://www.pagerduty.com/) event trigger
 * Custom HTTP(S) webhook
 
 The `method` directive in the configuration file determines how serverherald
@@ -106,6 +107,15 @@ iOS push notifications via Prowl:
 
     method: prowl
     prowl:
+      apikey: 6d708e45a377d3f4421542217c282a55
+    accounts:
+      myclouduser1:
+        apikey: db2132af5dc3125f9c688661fefab621
+
+PagerDuty event trigger:
+
+    method: pagerduty
+    pagerduty:
       apikey: 6d708e45a377d3f4421542217c282a55
     accounts:
       myclouduser1:
