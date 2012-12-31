@@ -23,6 +23,7 @@ following methods:
 
 * Email using a local SMTP service
 * Email using the [Mailgun](http://www.mailgun.com/) API
+* SMS via the [Twilio](http://www.twilio.com/) API
 * iOS push notifications via [Prowl](http://www.prowlapp.com/)
 * [PagerDuty](http://www.pagerduty.com/) event trigger
 * Custom HTTP(S) webhook
@@ -102,6 +103,18 @@ SMTP notifications via Mailgun:
     accounts:
       myclouduser1:
         apikey: db2132af5dc3125f9c688661fefab621
+
+SMS notifications via Twilio:
+
+    method: twilio
+    twilio:
+      accountsid: 6d708e45a377d3f4421542217c282a22
+      token: cef58b947cd85a4fd772fe37c9408ffa
+      from: "+15551234567"
+      to: "+15557654321"
+    accounts:
+      myclouduser1:
+      apikey: db2132af5dc3125f9c688661fefab621
 
 iOS push notifications via Prowl:
 

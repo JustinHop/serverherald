@@ -84,7 +84,8 @@ server become ACTIVE.
                'sms': 'RSNGCSNotifySMS',
                'prowl': 'RSNGCSNotifyProwl',
                'webhook': 'RSNGCSNotifyWebhook',
-               'pagerduty': 'RSNGCSNotifyPagerduty'}
+               'pagerduty': 'RSNGCSNotifyPagerduty',
+               'twilio': 'RSNGCSNotifyTwilio'}
     notify = getattr(serverherald.methods,
                      methods[config['method']])(config, silent=args.silent)
     notify.check_servers()
