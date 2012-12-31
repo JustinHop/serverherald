@@ -23,7 +23,7 @@ following methods:
 
 * Email using a local SMTP service
 * Email using the [Mailgun](http://www.mailgun.com/) API
-* SMS via the [Twilio](http://www.twilio.com/) API
+* SMS via the [Twilio](http://www.twilio.com/) or [Nexmo](http://nexmo.com/)
 * iOS push notifications via [Prowl](http://www.prowlapp.com/)
 * [PagerDuty](http://www.pagerduty.com/) event trigger
 * Custom HTTP(S) webhook
@@ -115,6 +115,18 @@ SMS notifications via Twilio:
     accounts:
       myclouduser1:
       apikey: db2132af5dc3125f9c688661fefab621
+
+SMS notifications via Nexmo:
+
+    method: nexmo
+    nexmo:
+      apikey: 12345678
+      apisecret: 87654321
+      from: 15551234567
+      to: 155577654321
+      accounts:
+        myclouduser1:
+        apikey: db2132af5dc3125f9c688661fefab621
 
 iOS push notifications via Prowl:
 
