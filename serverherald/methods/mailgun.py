@@ -1,14 +1,14 @@
 import sys
 import requests
 
-from serverherald.methods.mail import RSNGCSNotifyEmail
+from serverherald.methods.mail import ServerHeraldEmail
 
 
-class RSNGCSNotifyMailgun(RSNGCSNotifyEmail):
+class ServerHeraldMailgun(ServerHeraldEmail):
     """Class for sending email notifications via Mailgun API"""
 
     def validate_config(self):
-        RSNGCSNotifyEmail.validate_config(self)
+        ServerHeraldEmail.validate_config(self)
 
         # Mailgun requires a domain name and API key
         mgconfig = self.config.get('mailgun')

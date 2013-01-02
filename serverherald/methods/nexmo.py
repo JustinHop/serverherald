@@ -2,14 +2,14 @@ import sys
 import json
 import requests
 
-from serverherald.methods.base import RSNGCSNotify
+from serverherald.methods.base import ServerHerald
 
 
-class RSNGCSNotifyNexmo(RSNGCSNotify):
+class ServerHeraldNexmo(ServerHerald):
     """Class for sending SMS notifications via Nexmo API"""
 
     def validate_config(self):
-        RSNGCSNotify.validate_config(self)
+        ServerHerald.validate_config(self)
 
         # Nexmo requires an API key, API secret, a from and a to phone
         # number

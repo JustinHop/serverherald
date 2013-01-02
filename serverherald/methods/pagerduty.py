@@ -2,14 +2,14 @@ import sys
 import json
 import requests
 
-from serverherald.methods.base import RSNGCSNotify
+from serverherald.methods.base import ServerHerald
 
 
-class RSNGCSNotifyPagerduty(RSNGCSNotify):
+class ServerHeraldPagerduty(ServerHerald):
     """Class for sending event notifications via PagerDuty API"""
 
     def validate_config(self):
-        RSNGCSNotify.validate_config(self)
+        ServerHerald.validate_config(self)
 
         # PagerDuty requires an API key
         pdconfig = self.config.get('pagerduty')

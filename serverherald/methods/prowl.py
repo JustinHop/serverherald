@@ -1,14 +1,14 @@
 import sys
 import requests
 
-from serverherald.methods.base import RSNGCSNotify
+from serverherald.methods.base import ServerHerald
 
 
-class RSNGCSNotifyProwl(RSNGCSNotify):
+class ServerHeraldProwl(ServerHerald):
     """Class for sending push notifications via Prowl API"""
 
     def validate_config(self):
-        RSNGCSNotify.validate_config(self)
+        ServerHerald.validate_config(self)
 
         # Prowl requires an API key
         prowlconfig = self.config.get('prowl')

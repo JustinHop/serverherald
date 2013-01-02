@@ -1,14 +1,14 @@
 import sys
 import requests
 
-from serverherald.methods.mail import RSNGCSNotifyEmail
+from serverherald.methods.mail import ServerHeraldEmail
 
 
-class RSNGCSNotifySendgrid(RSNGCSNotifyEmail):
+class ServerHeraldSendgrid(ServerHeraldEmail):
     """Class for sending email notifications via Sendgrid API"""
 
     def validate_config(self):
-        RSNGCSNotifyEmail.validate_config(self)
+        ServerHeraldEmail.validate_config(self)
 
         # Sendgrid requires an API key and API username
         sgconfig = self.config.get('sendgrid')

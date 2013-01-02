@@ -6,7 +6,7 @@ import pyrax
 from jinja2 import Environment, PackageLoader
 
 
-class RSNGCSNotify:
+class ServerHerald:
 
     """Class for querying current cloud servers and sending
     notifications for new servers

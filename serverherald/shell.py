@@ -26,7 +26,7 @@ from email.mime.text import MIMEText
 
 """ Want a new notification type?
 1. Make a new python file in methods/
-2. Subclass RSNGCSNotify
+2. Subclass ServerHerald
 3. Override notify() and validate_config() as needed.
 4. Import it methods/__init__.py.
 5. Add a new notification type keyword by appending to the methods dict in
@@ -80,14 +80,14 @@ server become ACTIVE.
         sys.exit(1)
 
     # Dynamically determine the proper class for the notification method
-    methods = {'smtp': 'RSNGCSNotifySMTP',
-               'mailgun': 'RSNGCSNotifyMailgun',
-               'sendgrid': 'RSNGCSNotifySendgrid',
-               'prowl': 'RSNGCSNotifyProwl',
-               'webhook': 'RSNGCSNotifyWebhook',
-               'pagerduty': 'RSNGCSNotifyPagerduty',
-               'twilio': 'RSNGCSNotifyTwilio',
-               'nexmo': 'RSNGCSNotifyNexmo'}
+    methods = {'smtp': 'ServerHeraldSMTP',
+               'mailgun': 'ServerHeraldMailgun',
+               'sendgrid': 'ServerHeraldSendgrid',
+               'prowl': 'ServerHeraldProwl',
+               'webhook': 'ServerHeraldWebhook',
+               'pagerduty': 'ServerHeraldPagerduty',
+               'twilio': 'ServerHeraldTwilio',
+               'nexmo': 'ServerHeraldNexmo'}
     notify = getattr(serverherald.methods,
                      methods[config['method']])(config, silent=args.silent)
     notify.check_servers()

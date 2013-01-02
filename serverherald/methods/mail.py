@@ -1,14 +1,14 @@
-from serverherald.methods.base import RSNGCSNotify
+from serverherald.methods.base import ServerHerald
 
 
-class RSNGCSNotifyEmail(RSNGCSNotify):
+class ServerHeraldEmail(ServerHerald):
     """Parent class for sending email notifications.
     This doesn't supply notify() and should not be used directly.
     """
 
     def validate_config(self):
         """Email notifications require a `to` and `from` address"""
-        RSNGCSNotify.validate_config(self)
+        ServerHerald.validate_config(self)
 
         email = self.config.get('email')
         if not email or not email.get('to'):

@@ -2,14 +2,14 @@ import sys
 import json
 import requests
 
-from serverherald.methods.base import RSNGCSNotify
+from serverherald.methods.base import ServerHerald
 
 
-class RSNGCSNotifyTwilio(RSNGCSNotify):
+class ServerHeraldTwilio(ServerHerald):
     """Class for sending SMS notifications via Twilio API"""
 
     def validate_config(self):
-        RSNGCSNotify.validate_config(self)
+        ServerHerald.validate_config(self)
 
         # Twilio requires an Account SID, a token, a from, and a to phone
         # number

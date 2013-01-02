@@ -2,14 +2,14 @@ import sys
 import json
 import requests
 
-from serverherald.methods.base import RSNGCSNotify
+from serverherald.methods.base import ServerHerald
 
 
-class RSNGCSNotifyWebhook(RSNGCSNotify):
+class ServerHeraldWebhook(ServerHerald):
     """Class for sending notifications as a HTTP(S) POST to a specified URL"""
 
     def validate_config(self):
-        RSNGCSNotify.validate_config(self)
+        ServerHerald.validate_config(self)
 
         # Webhook requires a URL
         webhook = self.config.get('webhook')

@@ -1,10 +1,10 @@
 import smtplib
 from email.mime.text import MIMEText
 
-from serverherald.methods.mail import RSNGCSNotifyEmail
+from serverherald.methods.mail import ServerHeraldEmail
 
 
-class RSNGCSNotifySMTP(RSNGCSNotifyEmail):
+class ServerHeraldSMTP(ServerHeraldEmail):
     """Class for sending email notifications via SMTP"""
 
     def notify(self, context):
