@@ -178,6 +178,8 @@ A 5 minute cron job is recommended:
 
     */5 * * * * /path/to/serverherald
 
+serverherald uses lockfiles to prevent overlapping runs.
+
 ## FAQ
 
 ### Do I have to use Python virtualenv?
