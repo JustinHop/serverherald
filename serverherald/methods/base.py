@@ -44,7 +44,7 @@ class ServerHerald:
                        'directory' % local_dir)
                 sys.exit(1)
             try:
-                os.path.makedirs(local_dir, 0700)
+                os.makedirs(local_dir, 0700)
             except OSError:
                 print 'Could not create the local directory %s' % local_dir
                 sys.exit(1)
