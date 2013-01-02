@@ -28,4 +28,5 @@ pip-log.txt
 
 # Project specific
 config.yaml
+serverherald.yaml
 servers.json
