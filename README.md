@@ -200,7 +200,7 @@ software repository.
 
 ### Server Cache File
 
-This script will create a `~/.serverherald-servers.json` cache file to record
+This script will create a `~/.serverherald/servers.json` cache file to record
 the results from the previous execution.
 
 ## Developers
