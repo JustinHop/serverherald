@@ -42,7 +42,7 @@ Install python-virtualenv:
 
     # rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
     # yum install python-virtualenv
-    
+
 ### Ubuntu / Debian
 
 Install python-virtualenv:
@@ -64,7 +64,7 @@ serverherald requires a configuration file in
 location at runtime with the `--config` option. Otherwise serverherald will
 search these locations and select the first file that exists:
  * serverherald.yaml (in the current directory)
- * ~/serverherald.yaml
+ * ~/.serverherald/serverherald.yaml
  * /etc/serverherald.yaml
  * /etc/serverherald/serverherald.yaml
 
@@ -179,7 +179,7 @@ A 5 minute cron job is recommended:
     */5 * * * * /path/to/serverherald
 
 ## FAQ
-    
+
 ### Do I have to use Python virtualenv?
 
 No, there is no requirement to use Python virtualenv. Python virtualenv
