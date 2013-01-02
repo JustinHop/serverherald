@@ -3,7 +3,6 @@ import sys
 import json
 import getpass
 import pyrax
-import datetime
 from jinja2 import Environment, PackageLoader
 
 
@@ -65,13 +64,23 @@ class ServerHerald:
 
         if os.path.isfile(self.lock_file):
           with open(self.lock_file) as f:
-            lock_time = f.read().strip()
-          print ('serverherald is currently running and was started at %s' %
-                 lock_time)
-          sys.exit(1)
+            lock_pid = f.read().strip()
+          if os.path.isdir('/proc'):
+            if os.path.isdir('/proc/%s' % lock_pid):
+              exe = os.readlink('/proc/%s/exe' % lock_pid)
+              if 'python' in exe:
+                print 'serverherald[%s] is currently running' % lock_pid
+                sys.exit(1)
+              else:
+                print 'serverherald pid file found, but is not running'
+                os.unlink(self.lock_file)
+          else:
+            print 'serverherald lockfile found'
+            print 'serverherald cannot check the pid on this OS'
+            sys.exit(1)
 
         with open(self.lock_file, 'w+') as f:
-            f.write(datetime.datetime.now().isoformat(' '))
+            f.write('%s' % os.getpid())
 
     def validate_config(self):
         """Load the config.yaml file and validate it's contents within
