@@ -1,0 +1,1 @@
+{'event': 'New Server', 'hostname': '{{ server.name }}', 'ips': '{{ server_ips_list }}'}
