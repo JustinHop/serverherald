@@ -1,14 +1,14 @@
 import sys
 import requests
 
-from serverherald.methods.mail import ServerHeraldEmail
+from serverherald.notifiers.mail import ServerHeraldNotifyEmail
 
 
-class ServerHeraldSendgrid(ServerHeraldEmail):
+class ServerHeraldNotifySendgrid(ServerHeraldNotifyEmail):
     """Class for sending email notifications via Sendgrid API"""
 
     def validate_config(self):
-        ServerHeraldEmail.validate_config(self)
+        ServerHeraldNotifyEmail.validate_config(self)
 
         # Sendgrid requires an API key and API username
         sgconfig = self.config.get('sendgrid')
@@ -26,9 +26,6 @@ class ServerHeraldSendgrid(ServerHeraldEmail):
             sys.exit(1)
 
     def notify(self, context):
-        if self.silent:
-            return
-
         url = 'https://sendgrid.com/api/mail.send.json'
         data = {'api_user': self.config['sendgrid'].get('apiuser'),
                 'api_key': self.config['sendgrid'].get('apikey'),

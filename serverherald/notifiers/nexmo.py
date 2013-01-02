@@ -2,14 +2,14 @@ import sys
 import json
 import requests
 
-from serverherald.methods.base import ServerHerald
+from serverherald.notifiers.base import ServerHeraldNotifyBase
 
 
-class ServerHeraldNexmo(ServerHerald):
+class ServerHeraldNotifyNexmo(ServerHeraldNotifyBase):
     """Class for sending SMS notifications via Nexmo API"""
 
     def validate_config(self):
-        ServerHerald.validate_config(self)
+        ServerHeraldNotifyBase.validate_config(self)
 
         # Nexmo requires an API key, API secret, a from and a to phone
         # number
@@ -37,9 +37,6 @@ class ServerHeraldNexmo(ServerHerald):
         return template.render(context)
 
     def notify(self, context):
-        if self.silent:
-            return
-
         url = 'https://rest.nexmo.com/sms/json'
         data = {'api_key': self.config['nexmo'].get('apikey'),
                 'api_secret': self.config['nexmo'].get('apisecret'),

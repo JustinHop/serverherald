@@ -1,14 +1,14 @@
 import sys
 import requests
 
-from serverherald.methods.base import ServerHerald
+from serverherald.notifiers.base import ServerHeraldNotifyBase
 
 
-class ServerHeraldProwl(ServerHerald):
+class ServerHeraldNotifyProwl(ServerHeraldNotifyBase):
     """Class for sending push notifications via Prowl API"""
 
     def validate_config(self):
-        ServerHerald.validate_config(self)
+        ServerHeraldNotifyBase.validate_config(self)
 
         # Prowl requires an API key
         prowlconfig = self.config.get('prowl')
@@ -26,9 +26,6 @@ class ServerHeraldProwl(ServerHerald):
         return template.render(context)
 
     def notify(self, context):
-        if self.silent:
-            return
-
         message = self.get_message(context)
         url = 'https://api.prowlapp.com/publicapi/add'
         r = requests.post(url,

@@ -2,14 +2,14 @@ import sys
 import json
 import requests
 
-from serverherald.methods.base import ServerHerald
+from serverherald.notifiers.base import ServerHeraldNotifyBase
 
 
-class ServerHeraldTwilio(ServerHerald):
+class ServerHeraldNotifyTwilio(ServerHeraldNotifyBase):
     """Class for sending SMS notifications via Twilio API"""
 
     def validate_config(self):
-        ServerHerald.validate_config(self)
+        ServerHeraldNotifyBase.validate_config(self)
 
         # Twilio requires an Account SID, a token, a from, and a to phone
         # number
@@ -38,9 +38,6 @@ class ServerHeraldTwilio(ServerHerald):
         return template.render(context)
 
     def notify(self, context):
-        if self.silent:
-            return
-
         url = ('https://api.twilio.com/2010-04-01/Accounts'
                '/%s/SMS/Messages.json' %
                self.config['twilio'].get('accountsid'))

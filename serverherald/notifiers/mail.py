@@ -1,14 +1,14 @@
-from serverherald.methods.base import ServerHerald
+from serverherald.notifiers.base import ServerHeraldNotifyBase
 
 
-class ServerHeraldEmail(ServerHerald):
+class ServerHeraldNotifyEmail(ServerHeraldNotifyBase):
     """Parent class for sending email notifications.
     This doesn't supply notify() and should not be used directly.
     """
 
     def validate_config(self):
         """Email notifications require a `to` and `from` address"""
-        ServerHerald.validate_config(self)
+        ServerHeraldNotifyBase.validate_config(self)
 
         email = self.config.get('email')
         if not email or not email.get('to'):

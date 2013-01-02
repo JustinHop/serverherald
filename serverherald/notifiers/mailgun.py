@@ -1,14 +1,14 @@
 import sys
 import requests
 
-from serverherald.methods.mail import ServerHeraldEmail
+from serverherald.notifiers.mail import ServerHeraldNotifyEmail
 
 
-class ServerHeraldMailgun(ServerHeraldEmail):
+class ServerHeraldNotifyMailgun(ServerHeraldNotifyEmail):
     """Class for sending email notifications via Mailgun API"""
 
     def validate_config(self):
-        ServerHeraldEmail.validate_config(self)
+        ServerHeraldNotifyEmail.validate_config(self)
 
         # Mailgun requires a domain name and API key
         mgconfig = self.config.get('mailgun')
@@ -26,9 +26,6 @@ class ServerHeraldMailgun(ServerHeraldEmail):
             sys.exit(1)
 
     def notify(self, context):
-        if self.silent:
-            return
-
         message = self.get_message(context)
         url = ('https://api.mailgun.net/v2/%s/messages' %
                self.config['mailgun'].get('domain'))

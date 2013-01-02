@@ -2,14 +2,14 @@ import sys
 import json
 import requests
 
-from serverherald.methods.base import ServerHerald
+from serverherald.notifiers.base import ServerHeraldNotifyBase
 
 
-class ServerHeraldPagerduty(ServerHerald):
+class ServerHeraldNotifyPagerduty(ServerHeraldNotifyBase):
     """Class for sending event notifications via PagerDuty API"""
 
     def validate_config(self):
-        ServerHerald.validate_config(self)
+        ServerHeraldNotifyBase.validate_config(self)
 
         # PagerDuty requires an API key
         pdconfig = self.config.get('pagerduty')
@@ -27,9 +27,6 @@ class ServerHeraldPagerduty(ServerHerald):
         return template.render(context)
 
     def notify(self, context):
-        if self.silent:
-            return
-
         url = ('https://events.pagerduty.com'
                '/generic/2010-04-15/create_event.json')
         description = 'Server %s online' % context['server'].name

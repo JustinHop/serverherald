@@ -1,16 +1,13 @@
 import smtplib
 from email.mime.text import MIMEText
 
-from serverherald.methods.mail import ServerHeraldEmail
+from serverherald.notifiers.mail import ServerHeraldNotifyEmail
 
 
-class ServerHeraldSMTP(ServerHeraldEmail):
+class ServerHeraldNotifySMTP(ServerHeraldNotifyEmail):
     """Class for sending email notifications via SMTP"""
 
     def notify(self, context):
-        if self.silent:
-            return
-
         email = MIMEText(self.get_message(context))
         email['Subject'] = self.get_subject()
         email['From'] = self.config['email']['from']
