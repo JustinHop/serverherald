@@ -1,9 +1,9 @@
 New cloud server online.
 
 Cloud Server: {{ server.name }}
-IP Addresses: {{ server_ips }} 
+IP Addresses: {{ server_ips }}
 Image:        {{ server_image }}
-Type:         {{ server.type }}
+Type:         {{ flavor }}
 
 This server is accessible through the control panel at:
 
