@@ -49,7 +49,7 @@ class ServerHerald:
                 print 'Could not create the local directory %s' % local_dir
                 sys.exit(1)
 
-        test_file = os.path.expanduser('~/%s/writetest' % local_dir)
+        test_file = '%s/writetest' % local_dir
         try:
             with open(test_file, 'w+') as f:
                 f.write('test')
