@@ -14,8 +14,8 @@ class ServerHeraldPagerduty(ServerHerald):
         # PagerDuty requires an API key
         pdconfig = self.config.get('pagerduty')
         if not pdconfig:
-            print '`pagerduty` notification type requires a PagerDuty API ' \
-                  'key to be specified in the config file.'
+            print ('`pagerduty` notification type requires a PagerDuty API '
+                   'key to be specified in the config file.')
             sys.exit(1)
 
         if not pdconfig.get('apikey'):
@@ -30,8 +30,8 @@ class ServerHeraldPagerduty(ServerHerald):
         if self.silent:
             return
 
-        url = 'https://events.pagerduty.com' \
-              '/generic/2010-04-15/create_event.json'
+        url = ('https://events.pagerduty.com'
+               '/generic/2010-04-15/create_event.json')
         description = 'Server %s online' % context['server'].name
         data = {'service_key': self.config['pagerduty'].get('apikey'),
                 'event_type': 'trigger',

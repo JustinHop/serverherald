@@ -15,16 +15,18 @@ class ServerHeraldTwilio(ServerHerald):
         # number
         tconfig = self.config.get('twilio')
         if not tconfig:
-            print '`twilio` notification type requires a Twilio Account SID' \
-                  ', a token, a recipient and a sending phone number to be ' \
-                  'specified in the config file.'
+            print ('`twilio` notification type requires a Twilio Account SID'
+                   ', a token, a recipient and a sending phone number to be '
+                   'specified in the config file.')
             sys.exit(1)
 
         required_fields = {
-         'accountsid': 'Twilio requires an Account SID in the config file',
-         'token': 'Twilio requires a token in the config file',
-         'from': 'Twilio requires a sending phone number in the config file',
-         'to': 'Twilio requires a recipient phone number in the config file'}
+            'accountsid': 'Twilio requires an Account SID in the config file',
+            'token': 'Twilio requires a token in the config file',
+            'from': ('Twilio requires a sending phone number in the config '
+                     'file'),
+            'to': ('Twilio requires a recipient phone number in the config '
+                   'file')}
 
         for field, message in required_fields.iteritems():
             if not tconfig.get(field):
@@ -39,8 +41,9 @@ class ServerHeraldTwilio(ServerHerald):
         if self.silent:
             return
 
-        url = 'https://api.twilio.com/2010-04-01/Accounts' \
-              '/%s/SMS/Messages.json' % self.config['twilio'].get('accountsid')
+        url = ('https://api.twilio.com/2010-04-01/Accounts'
+               '/%s/SMS/Messages.json' %
+               self.config['twilio'].get('accountsid'))
         data = {'From': self.config['twilio'].get('from'),
                 'To': self.config['twilio'].get('to'),
                 'Body': self.get_message(context)}

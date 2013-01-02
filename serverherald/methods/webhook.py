@@ -14,8 +14,8 @@ class ServerHeraldWebhook(ServerHerald):
         # Webhook requires a URL
         webhook = self.config.get('webhook')
         if not webhook:
-            print '`webhook` notification type requires a URL to be '\
-                  'specified in the config file.'
+            print ('`webhook` notification type requires a URL to be '
+                   'specified in the config file.')
             sys.exit(1)
 
         if not webhook.get('url'):

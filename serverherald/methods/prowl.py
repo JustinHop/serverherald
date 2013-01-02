@@ -13,8 +13,8 @@ class ServerHeraldProwl(ServerHerald):
         # Prowl requires an API key
         prowlconfig = self.config.get('prowl')
         if not prowlconfig:
-            print '`prowl` notification type requires a Prowl API key to be '\
-                  'specified in the config file.'
+            print ('`prowl` notification type requires a Prowl API key to be '
+                   'specified in the config file.')
             sys.exit(1)
 
         if not prowlconfig.get('apikey'):

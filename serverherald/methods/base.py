@@ -39,15 +39,15 @@ class ServerHerald:
         local_dir = os.path.expanduser('~/.serverherald')
 
         if not os.path.isdir(local_dir):
-          if os.path.isfile(local_dir):
-            print ('%s exists as a file, although it should be a '
-                   'directory' % local_dir)
-            sys.exit(1)
-          try:
-            os.path.makedirs(local_dir, 0700)
-          except OSError:
-            print 'Could not create the local directory %s' % local_dir
-            sys.exit(1)
+            if os.path.isfile(local_dir):
+                print ('%s exists as a file, although it should be a '
+                       'directory' % local_dir)
+                sys.exit(1)
+            try:
+                os.path.makedirs(local_dir, 0700)
+            except OSError:
+                print 'Could not create the local directory %s' % local_dir
+                sys.exit(1)
 
         test_file = os.path.expanduser('~/%s/writetest' % local_dir)
         try:
@@ -55,9 +55,9 @@ class ServerHerald:
                 f.write('test')
             os.unlink(test_file)
         except IOError:
-            print 'It does not appear that the user (%s) this script was ' \
-                  'executed as can write to\n%s' % (
-                  getpass.getuser(), os.path.dirname(test_file))
+            print ('It does not appear that the user (%s) this script was '
+                   'executed as can write to\n%s' %
+                   (getpass.getuser(), os.path.dirname(test_file)))
             sys.exit(1)
 
     def validate_config(self):

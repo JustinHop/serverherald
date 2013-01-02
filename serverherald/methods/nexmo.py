@@ -15,16 +15,17 @@ class ServerHeraldNexmo(ServerHerald):
         # number
         nconfig = self.config.get('nexmo')
         if not nconfig:
-            print '`nexmo` notification type requires a nexmo API key, API '\
-                  'secret, a recipient and a sending phone number to be ' \
-                  'specified in the config file.'
+            print ('`nexmo` notification type requires a nexmo API key, API '
+                   'secret, a recipient and a sending phone number to be '
+                   'specified in the config file.')
             sys.exit(1)
 
         required_fields = {
-         'apikey': 'nexmo requires an API key in the config file',
-         'apisecret': 'nexmo requires an API secret in the config file',
-         'from': 'nexmo requires a sending name or number in the config file',
-         'to': 'nexmo requires a recipient phone number in the config file'}
+            'apikey': 'nexmo requires an API key in the config file',
+            'apisecret': 'nexmo requires an API secret in the config file',
+            'from': ('nexmo requires a sending name or number in the config'
+                     'file'),
+            'to': 'nexmo requires a recipient phone number in the config file'}
 
         for field, message in required_fields.iteritems():
             if not nconfig.get(field):

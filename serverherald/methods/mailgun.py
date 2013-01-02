@@ -13,8 +13,8 @@ class ServerHeraldMailgun(ServerHeraldEmail):
         # Mailgun requires a domain name and API key
         mgconfig = self.config.get('mailgun')
         if not mgconfig:
-            print '`mailgun` notification type requires a Mailgun domain and' \
-                  ' API key to be specified in the config file.'
+            print ('`mailgun` notification type requires a Mailgun domain and'
+                   ' API key to be specified in the config file.')
             sys.exit(1)
 
         if not mgconfig.get('domain'):
@@ -30,8 +30,8 @@ class ServerHeraldMailgun(ServerHeraldEmail):
             return
 
         message = self.get_message(context)
-        url = 'https://api.mailgun.net/v2/%s/messages' % \
-            self.config['mailgun'].get('domain')
+        url = ('https://api.mailgun.net/v2/%s/messages' %
+               self.config['mailgun'].get('domain'))
         r = requests.post(url,
                           auth=('api', self.config['mailgun'].get('apikey')),
                           data={'from': self.config['email']['from'],

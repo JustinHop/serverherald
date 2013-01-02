@@ -13,8 +13,8 @@ class ServerHeraldSendgrid(ServerHeraldEmail):
         # Sendgrid requires an API key and API username
         sgconfig = self.config.get('sendgrid')
         if not sgconfig:
-            print '`sendgrid` notification type requires an API username ' \
-                  ' and an API key to be specified in the config file.'
+            print ('`sendgrid` notification type requires an API username'
+                   ' and an API key to be specified in the config file.')
             sys.exit(1)
 
         if not sgconfig.get('apiuser'):
