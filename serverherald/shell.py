@@ -145,26 +145,32 @@ class ServerHerald:
                 for server in cs.servers.list():
                     id = server.id
                     status = server.status
-                    public_ips = server.addresses.get('public')
-                    if public_ips:
-                        ips = ', '.join([ver['addr'] for ver in public_ips])
-                    else:
-                        ips = 'None'
-                    try:
-                        image = filter(lambda x: x.id == server.image['id'],
-                                       images)[0].name
-                    except IndexError:
-                        image = cs.images.get(server.image['id']).name
-                    flavor = filter(lambda x: int(x.id) == int(
-                                    server.flavor['id']), flavors)[0].name
+
                     if username not in servers:
                         servers[username] = []
                     if username not in last_servers:
                         last_servers[username] = []
+
                     servers[username].append(id)
+
                     if (status == 'ACTIVE'
                             and id not in last_servers[username]
                             and not self.silent):
+                        public_ips = server.addresses.get('public')
+                        if public_ips:
+                            ips = ', '.join([ver['addr'] for ver in
+                                            public_ips])
+                        else:
+                            ips = 'None'
+                        try:
+                            image = filter(lambda x: x.id ==
+                                           server.image['id'],
+                                           images)[0].name
+                        except IndexError:
+                            image = cs.images.get(server.image['id']).name
+                        flavor = filter(lambda x: int(x.id) == int(
+                                        server.flavor['id']), flavors)[0].name
+
                         context = {'id': id, 'status': status,
                                    'server': server, 'server_image': image,
                                    'flavor': flavor, 'server_ips': ips,
