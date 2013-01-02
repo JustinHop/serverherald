@@ -55,7 +55,8 @@ server become ACTIVE.
     # A user can specify a configuration file or we will go hunting for one
     config_file = args.config
     if config_file is None:
-        possible_locations = ['serverherald.yaml', '~/serverherald.yaml',
+        possible_locations = ['serverherald.yaml', '~/.serverherald.yaml',
+                              '~/.serverherald/serverherald.yaml',
                               '/etc/serverherald.yaml',
                               '/etc/serverherald/serverherald.yaml']
         for location in possible_locations:

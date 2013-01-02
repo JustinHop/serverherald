@@ -36,7 +36,20 @@ class RSNGCSNotify:
         be created.
         """
 
-        test_file = os.path.expanduser('~/.serverherald-writetest')
+        local_dir = os.path.expanduser('~/.serverherald')
+
+        if not os.path.isdir(local_dir):
+          if os.path.isfile(local_dir):
+            print ('%s exists as a file, although it should be a '
+                   'directory' % local_dir)
+            sys.exit(1)
+          try:
+            os.path.makedirs(local_dir, 0700)
+          except OSError:
+            print 'Could not create the local directory %s' % local_dir
+            sys.exit(1)
+
+        test_file = os.path.expanduser('~/%s/writetest' % local_dir)
         try:
             with open(test_file, 'w+') as f:
                 f.write('test')
@@ -69,7 +82,7 @@ class RSNGCSNotify:
         """Check all regions for an Auth endpoint querying for all servers,
         sending notifications for new servers in ACTIVE status
         """
-        servers_file = os.path.expanduser('~/.serverherald-servers.json')
+        servers_file = os.path.expanduser('~/.serverherald/servers.json')
         if not os.path.isfile(servers_file):
             last_servers = {}
         else:
