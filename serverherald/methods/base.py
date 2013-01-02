@@ -3,6 +3,7 @@ import sys
 import json
 import getpass
 import pyrax
+import datetime
 from jinja2 import Environment, PackageLoader
 
 
@@ -59,6 +60,18 @@ class ServerHerald:
                    'executed as can write to\n%s' %
                    (getpass.getuser(), os.path.dirname(test_file)))
             sys.exit(1)
+
+        self.lock_file = '%s/lock' % local_dir
+
+        if os.path.isfile(self.lock_file):
+          with open(self.lock_file) as f:
+            lock_time = f.read().strip()
+          print ('serverherald is currently running and was started at %s' %
+                 lock_time)
+          sys.exit(1)
+
+        with open(self.lock_file, 'w+') as f:
+            f.write(datetime.datetime.now().isoformat(' '))
 
     def validate_config(self):
         """Load the config.yaml file and validate it's contents within
@@ -136,3 +149,5 @@ class ServerHerald:
 
         with open(servers_file, 'wb+') as f:
             json.dump(servers, f)
+
+        os.unlink(self.lock_file)
