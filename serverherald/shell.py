@@ -61,7 +61,7 @@ server become ACTIVE.
                               '/etc/serverherald/serverherald.yaml']
         for location in possible_locations:
             if os.path.exists(os.path.expanduser(location)):
-                config_file = location
+                config_file = os.path.expanduser(location)
                 break
 
         if config_file is None:
