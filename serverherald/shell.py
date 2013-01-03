@@ -235,7 +235,8 @@ server become ACTIVE.
                  'webhook': 'ServerHeraldNotifyWebhook',
                  'pagerduty': 'ServerHeraldNotifyPagerduty',
                  'twilio': 'ServerHeraldNotifyTwilio',
-                 'nexmo': 'ServerHeraldNotifyNexmo'}
+                 'nexmo': 'ServerHeraldNotifyNexmo',
+                 'pushover': 'ServerHeraldNotifyPushover'}
     notifier = getattr(serverherald.notifiers,
                        notifiers[config['method']])
 

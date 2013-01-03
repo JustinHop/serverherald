@@ -10,6 +10,7 @@ from serverherald.notifiers.webhook import ServerHeraldNotifyWebhook
 from serverherald.notifiers.pagerduty import ServerHeraldNotifyPagerduty
 from serverherald.notifiers.twilio import ServerHeraldNotifyTwilio
 from serverherald.notifiers.nexmo import ServerHeraldNotifyNexmo
+from serverherald.notifiers.pushover import ServerHeraldNotifyPushover
 
 __all__ = ['base', 'mail', 'mailgun', 'nexmo', 'pagerduty', 'prowl',
-           'sendgrid', 'smtp', 'twilio', 'webhook']
+           'pushover', 'sendgrid', 'smtp', 'twilio', 'webhook']
