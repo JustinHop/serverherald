@@ -23,7 +23,7 @@ following methods:
 
 * Email (SMTP, [Mailgun](http://www.mailgun.com/), or [Sendgrid](http://sendgrid.com))
 * SMS ([Twilio](http://www.twilio.com/) or [Nexmo](http://nexmo.com/))
-* iOS push notifications via [Prowl](http://www.prowlapp.com/)
+* Mobile notification apps ([Prowl](http://www.prowlapp.com/) or [Pushover](https://pushover.net/))
 * [PagerDuty](http://www.pagerduty.com/) event trigger
 * Custom HTTP(S) webhook
 
@@ -145,6 +145,15 @@ iOS push notifications via Prowl:
 
     method: prowl
     prowl:
+      apikey: 6d708e45a377d3f4421542217c282a55
+    accounts:
+      myclouduser1:
+        apikey: db2132af5dc3125f9c688661fefab621
+
+Android or iOS push notifications via Pushover:
+
+    method: pushover
+    pushover:
       apikey: 6d708e45a377d3f4421542217c282a55
     accounts:
       myclouduser1:

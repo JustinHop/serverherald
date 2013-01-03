@@ -22,10 +22,6 @@ class ServerHeraldNotifyPagerduty(ServerHeraldNotifyBase):
             print 'PagerDuty requires an API key in the config file'
             sys.exit(1)
 
-    def get_details(self, context):
-        template = self.template_env.get_template('pagerduty')
-        return template.render(context)
-
     def notify(self, context):
         url = ('https://events.pagerduty.com'
                '/generic/2010-04-15/create_event.json')
@@ -33,7 +29,7 @@ class ServerHeraldNotifyPagerduty(ServerHeraldNotifyBase):
         data = {'service_key': self.config['pagerduty'].get('apikey'),
                 'event_type': 'trigger',
                 'description': description,
-                'details': self.get_details(context)}
+                'details': self.render_template('pagerduty', context)}
 
         r = requests.post(url, data=json.dumps(data))
 

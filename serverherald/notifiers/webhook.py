@@ -22,13 +22,10 @@ class ServerHeraldNotifyWebhook(ServerHeraldNotifyBase):
             print 'Webhook requires a URL in the config file'
             sys.exit(1)
 
-    def get_message(self, context):
-        template = self.template_env.get_template('webhook')
-        return template.render(context)
-
     def notify(self, context):
-        message = self.get_message(context)
         url = self.config['webhook'].get('url')
-        r = requests.post(url, data=json.dumps(message))
+        r = requests.post(url,
+                          data=json.dumps(self.render_template('webhook',
+                                                               context)))
         if r.status_code != 200:
             print 'Webhook Error: (%d) %s' % (r.status_code, r.text)

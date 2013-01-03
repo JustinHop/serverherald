@@ -23,10 +23,6 @@ class ServerHeraldNotifyEmail(ServerHeraldNotifyBase):
         return self.config['email'].get('subject',
                                         'New Cloud Server Online')
 
-    def get_message(self, context):
-        template = self.template_env.get_template('message')
-        return template.render(context)
-
     def get_recipients(self):
         if not isinstance(self.config['email']['to'], list):
             self.config['email']['to'] = [self.config['email']['to']]
