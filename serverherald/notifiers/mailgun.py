@@ -8,6 +8,8 @@ class ServerHeraldNotifyMailgun(ServerHeraldNotifyEmail):
     """Class for sending email notifications via Mailgun API"""
 
     def validate_config(self):
+        """Verify that all required config settings are present"""
+
         ServerHeraldNotifyEmail.validate_config(self)
 
         # Mailgun requires a domain name and API key
@@ -26,14 +28,15 @@ class ServerHeraldNotifyMailgun(ServerHeraldNotifyEmail):
             sys.exit(1)
 
     def notify(self, context):
+        """Send email notification"""
         url = ('https://api.mailgun.net/v2/%s/messages' %
-               self.config['mailgun'].get('domain'))
-        r = requests.post(url,
-                          auth=('api', self.config['mailgun'].get('apikey')),
-                          data={'from': self.config['email']['from'],
-                                'to': self.get_recipients(),
-                                'subject': self.get_subject(),
-                                'text': self.render_template('message',
-                                                             context)})
-        if r.status_code != 200:
-            print 'Mailgun API Error: (%d) %s' % (r.status_code, r.text)
+               self.config_get('mailgun', 'domain'))
+        data = {'token': app_apikey,
+                'user': self.config_get('pushover', 'apikey'),
+                'message': self.render_template('sms', context)}
+        response = requests.post(url, data=data,
+                                 auth=('api', self.config_get('mailgun',
+                                       'apikey')))
+        if response.status_code != 200:
+            print 'Mailgun API Error: (%d) %s' % (response.status_code,
+                                                  response.text)

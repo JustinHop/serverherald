@@ -1,3 +1,5 @@
+import getpass
+import keyring
 import os
 import sys
 from jinja2 import Environment, PackageLoader, FileSystemLoader
@@ -20,6 +22,30 @@ class ServerHeraldNotifyBase(object):
         self.validate_config()
         self.template_env = Environment(loader=PackageLoader('serverherald',
                                         'templates'))
+
+    def config_get(self, section, key, default=None):
+        """Return value that matches key in config settings.
+        Reference keyring if needed.
+        """
+        config_section = self.config.get(section)
+        if config_section.get(key, default) == 'USE_KEYRING':
+            keyring_path = section + '/' + key
+            keyring_value = keyring.get_password('serverherald', keyring_path)
+            if keyring_value is None:
+                print 'The keyring storage mechanism has been selected for' \
+                      '%s but the keyring is empty' % keyring_path
+
+                while 1:
+                    user_value = getpass.getpass("%s: " % key)
+                    if user_value != '':
+                        keyring.set_password('serverherald', keyring_path,
+                                             user_value)
+                        break
+                return user_value
+            else:
+                return keyring_value
+        else:
+            return config_section.get(key, default)
 
     def validate_config(self):
         """Load the config.yaml file and validate it's contents within

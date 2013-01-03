@@ -8,6 +8,8 @@ class ServerHeraldNotifySendgrid(ServerHeraldNotifyEmail):
     """Class for sending email notifications via Sendgrid API"""
 
     def validate_config(self):
+        """Verify that all required config settings are present"""
+
         ServerHeraldNotifyEmail.validate_config(self)
 
         # Sendgrid requires an API key and API username
@@ -26,15 +28,17 @@ class ServerHeraldNotifySendgrid(ServerHeraldNotifyEmail):
             sys.exit(1)
 
     def notify(self, context):
+        """Send email notification"""
         url = 'https://sendgrid.com/api/mail.send.json'
-        data = {'api_user': self.config['sendgrid'].get('apiuser'),
-                'api_key': self.config['sendgrid'].get('apikey'),
+        data = {'api_user': self.config_get('sendgrid', 'apiuser'),
+                'api_key': self.config_get('sendgrid', 'apikey'),
                 'to': self.get_recipients(),
-                'from': self.config['email'].get('from'),
+                'from': self.config_get('email', 'from'),
                 'subject': self.get_subject(),
                 'text': self.render_template('message', context)}
 
-        r = requests.post(url, data=data)
+        response = requests.post(url, data=data)
 
-        if r.status_code != 200:
-            print 'Sendgrid API Error: (%d) %s' % (r.status_code, r.text)
+        if response.status_code != 200:
+            print 'Sendgrid API Error: (%d) %s' % (response.status_code,
+                                                   response.text)

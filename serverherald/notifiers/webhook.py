@@ -9,6 +9,8 @@ class ServerHeraldNotifyWebhook(ServerHeraldNotifyBase):
     """Class for sending notifications as a HTTP(S) POST to a specified URL"""
 
     def validate_config(self):
+        """Verify that all required config settings are present"""
+
         ServerHeraldNotifyBase.validate_config(self)
 
         # Webhook requires a URL
@@ -23,9 +25,12 @@ class ServerHeraldNotifyWebhook(ServerHeraldNotifyBase):
             sys.exit(1)
 
     def notify(self, context):
-        url = self.config['webhook'].get('url')
-        r = requests.post(url,
-                          data=json.dumps(self.render_template('webhook',
-                                                               context)))
-        if r.status_code != 200:
-            print 'Webhook Error: (%d) %s' % (r.status_code, r.text)
+        """Send HTTP(S) notification"""
+        url = self.config_get('webhook', 'url')
+        response = requests.post(url,
+                                 data=json.dumps(
+                                     self.render_template('webhook',
+                                                          context)))
+        if response.status_code != 200:
+            print 'Webhook Error: (%d) %s' % (response.status_code,
+                                              response.text)
