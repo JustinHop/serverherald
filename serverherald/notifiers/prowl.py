@@ -26,9 +26,8 @@ class ServerHeraldNotifyProwl(ServerHeraldNotifyBase):
         message = self.render_template('prowl', context)
         url = 'https://api.prowlapp.com/publicapi/add'
         r = requests.post(url,
-                          data={'apikey': self.config['prowl'].get('apikey'),
-                                'priority':
-                                self.config['prowl'].get('priority', 0),
+                          data={'apikey': self.config_get('prowl', 'apikey'),
+                                'priority': self.config_get('prowl', 'priority', 0),
                                 'application': 'Server Herald',
                                 'event': 'New Server',
                                 'description': self.render_template('prowl',
