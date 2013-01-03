@@ -32,16 +32,17 @@ class ServerHeraldNotifyBase(object):
             keyring_path = section + '/' + key
             keyring_value = keyring.get_password('serverherald', keyring_path)
             if keyring_value is None:
-                print 'The keyring storage mechanism has been selected for ' \
-                      '%s value but the keyring is empty' % keyring_path
+                print 'The keyring storage mechanism has been selected for' \
+                      '%s but the keyring is empty' % keyring_path
 
                 while 1:
                     user_value = getpass.getpass("%s: " % key)
-                    print 'SECRET VALUE: |%s|' % user_value
                     if user_value != '':
                         keyring.set_password('serverherald', keyring_path, user_value)
                         break
                 return user_value
+            else:
+                return keyring_value
         else:
             return config_section.get(key, default)
 
