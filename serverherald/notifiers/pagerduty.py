@@ -9,6 +9,8 @@ class ServerHeraldNotifyPagerduty(ServerHeraldNotifyBase):
     """Class for sending event notifications via PagerDuty API"""
 
     def validate_config(self):
+        """Verify that all required config settings are present"""
+
         ServerHeraldNotifyBase.validate_config(self)
 
         # PagerDuty requires an API key
@@ -23,15 +25,17 @@ class ServerHeraldNotifyPagerduty(ServerHeraldNotifyBase):
             sys.exit(1)
 
     def notify(self, context):
+        """Send PagerDuty event"""
         url = ('https://events.pagerduty.com'
                '/generic/2010-04-15/create_event.json')
         description = 'Server %s online' % context['server'].name
-        data = {'service_key': self.config['pagerduty'].get('apikey'),
+        data = {'service_key': self.config_get('pagerduty', 'apikey'),
                 'event_type': 'trigger',
                 'description': description,
                 'details': self.render_template('pagerduty', context)}
 
-        r = requests.post(url, data=json.dumps(data))
+        response = requests.post(url, data=json.dumps(data))
 
-        if r.status_code != 200:
-            print 'PagerDuty API Error: (%d) %s' % (r.status_code, r.text)
+        if response.status_code != 200:
+            print 'PagerDuty API Error: (%d) %s' % (response.status_code,
+                                                    response.text)

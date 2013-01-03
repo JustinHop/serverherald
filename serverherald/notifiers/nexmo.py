@@ -1,5 +1,4 @@
 import sys
-import json
 import requests
 
 from serverherald.notifiers.base import ServerHeraldNotifyBase
@@ -9,6 +8,7 @@ class ServerHeraldNotifyNexmo(ServerHeraldNotifyBase):
     """Class for sending SMS notifications via Nexmo API"""
 
     def validate_config(self):
+        """Verify that all required config settings are present"""
         ServerHeraldNotifyBase.validate_config(self)
 
         # Nexmo requires an API key, API secret, a from and a to phone
@@ -33,19 +33,21 @@ class ServerHeraldNotifyNexmo(ServerHeraldNotifyBase):
                 sys.exit(1)
 
     def notify(self, context):
+        """Send SMS notification"""
         url = 'https://rest.nexmo.com/sms/json'
-        data = {'api_key': self.config['nexmo'].get('apikey'),
-                'api_secret': self.config['nexmo'].get('apisecret'),
-                'from': self.config['nexmo'].get('from'),
-                'to': self.config['nexmo'].get('to'),
+        data = {'api_key': self.config_get('nexmo', 'apikey'),
+                'api_secret': self.config_get('nexmo', 'apisecret'),
+                'from': self.config_get('nexmo', 'from'),
+                'to': self.config_get('nexmo', 'to'),
                 'text': self.render_template('sms', context)}
 
-        r = requests.post(url, data=data)
+        response = requests.post(url, data=data)
 
-        if r.status_code != 200:
-            print 'nexmo API Error: (%d) %s' % (r.status_code, r.text)
+        if response.status_code != 200:
+            print 'nexmo API Error: (%d) %s' % (response.status_code,
+                                                response.text)
         else:
-            """Nexmo API returns 200 for application errors too"""
-            for message in r.json()['messages']:
+            # Nexmo API returns 200 for application errors too"""
+            for message in response.json()['messages']:
                 if message['status'] != "0":
                     print 'nexmo API Error: %s' % message['error-text']

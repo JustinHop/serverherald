@@ -38,7 +38,8 @@ class ServerHeraldNotifyBase(object):
                 while 1:
                     user_value = getpass.getpass("%s: " % key)
                     if user_value != '':
-                        keyring.set_password('serverherald', keyring_path, user_value)
+                        keyring.set_password('serverherald', keyring_path,
+                                             user_value)
                         break
                 return user_value
             else:

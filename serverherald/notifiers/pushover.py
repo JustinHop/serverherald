@@ -8,6 +8,8 @@ class ServerHeraldNotifyPushover(ServerHeraldNotifyBase):
     """Class for sending push notifications via Pushover API"""
 
     def validate_config(self):
+        """Verify that all required config settings are present"""
+
         ServerHeraldNotifyBase.validate_config(self)
 
         # Pushover requires an API key
@@ -22,12 +24,13 @@ class ServerHeraldNotifyPushover(ServerHeraldNotifyBase):
             sys.exit(1)
 
     def notify(self, context):
-        APPLICATION_APIKEY = 'oPlGyPwBxgd5EicP1qocGV6bYi5RgF'
+        """Send message notification"""
+        app_apikey = 'oPlGyPwBxgd5EicP1qocGV6bYi5RgF'
         url = 'https://api.pushover.net/1/messages.json'
-        r = requests.post(url,
-                          data={'token': APPLICATION_APIKEY,
-                                'user': self.config['pushover'].get('apikey'),
-                                'message': self.render_template('sms',
-                                                                context)})
-        if r.status_code != 200:
-            print 'Pushover API Error: (%d) %s' % (r.status_code, r.text)
+        data = {'token': app_apikey,
+                'user': self.config_get('pushover', 'apikey'),
+                'message': self.render_template('sms', context)}
+        response = requests.post(url, data=data)
+        if response.status_code != 200:
+            print 'Pushover API Error: (%d) %s' % (response.status_code,
+                                                   response.text)
