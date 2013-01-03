@@ -26,7 +26,6 @@ class ServerHeraldNotifyMailgun(ServerHeraldNotifyEmail):
             sys.exit(1)
 
     def notify(self, context):
-        message = self.get_message(context)
         url = ('https://api.mailgun.net/v2/%s/messages' %
                self.config['mailgun'].get('domain'))
         r = requests.post(url,
@@ -34,6 +33,7 @@ class ServerHeraldNotifyMailgun(ServerHeraldNotifyEmail):
                           data={'from': self.config['email']['from'],
                                 'to': self.get_recipients(),
                                 'subject': self.get_subject(),
-                                'text': message})
+                                'text': self.render_template('message',
+                                                             context)})
         if r.status_code != 200:
             print 'Mailgun API Error: (%d) %s' % (r.status_code, r.text)

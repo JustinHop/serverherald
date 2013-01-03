@@ -33,17 +33,13 @@ class ServerHeraldNotifyTwilio(ServerHeraldNotifyBase):
                 print message
                 sys.exit(1)
 
-    def get_message(self, context):
-        template = self.template_env.get_template('sms')
-        return template.render(context)
-
     def notify(self, context):
         url = ('https://api.twilio.com/2010-04-01/Accounts'
                '/%s/SMS/Messages.json' %
                self.config['twilio'].get('accountsid'))
         data = {'From': self.config['twilio'].get('from'),
                 'To': self.config['twilio'].get('to'),
-                'Body': self.get_message(context)}
+                'Body': self.render_template('sms', context)}
 
         r = requests.post(url,
                           auth=(self.config['twilio'].get('accountsid'),

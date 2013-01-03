@@ -1,3 +1,4 @@
+import os
 import sys
 import requests
 
@@ -21,12 +22,8 @@ class ServerHeraldNotifyProwl(ServerHeraldNotifyBase):
             print 'Prowl requires an API key in the config file'
             sys.exit(1)
 
-    def get_message(self, context):
-        template = self.template_env.get_template('prowl')
-        return template.render(context)
-
     def notify(self, context):
-        message = self.get_message(context)
+        message = self.render_template('prowl', context)
         url = 'https://api.prowlapp.com/publicapi/add'
         r = requests.post(url,
                           data={'apikey': self.config['prowl'].get('apikey'),
@@ -34,6 +31,7 @@ class ServerHeraldNotifyProwl(ServerHeraldNotifyBase):
                                 self.config['prowl'].get('priority', 0),
                                 'application': 'Server Herald',
                                 'event': 'New Server',
-                                'description': message})
+                                'description': self.render_template('prowl',
+                                                                    context)})
         if r.status_code != 200:
             print 'Prowl API Error: (%d) %s' % (r.status_code, r.text)

@@ -21,17 +21,13 @@ class ServerHeraldNotifyPushover(ServerHeraldNotifyBase):
             print 'Pushover requires an API key in the config file'
             sys.exit(1)
 
-    def get_message(self, context):
-        template = self.template_env.get_template('sms')
-        return template.render(context)
-
     def notify(self, context):
         APPLICATION_APIKEY = 'oPlGyPwBxgd5EicP1qocGV6bYi5RgF'
-        message = self.get_message(context)
         url = 'https://api.pushover.net/1/messages.json'
         r = requests.post(url,
                           data={'token': APPLICATION_APIKEY,
                                 'user': self.config['pushover'].get('apikey'),
-                                'message': message})
+                                'message': self.render_template('sms',
+                                                                context)})
         if r.status_code != 200:
             print 'Pushover API Error: (%d) %s' % (r.status_code, r.text)

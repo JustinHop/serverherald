@@ -1,5 +1,6 @@
+import os
 import sys
-from jinja2 import Environment, PackageLoader
+from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 
 class ServerHeraldNotifyBase(object):
@@ -37,3 +38,18 @@ class ServerHeraldNotifyBase(object):
             if 'apikey' not in settings:
                 print 'Account %s does not have an API key' % account
                 sys.exit(1)
+
+    def render_template(self, templatename, context):
+        """Render the template based on the data context.
+
+        Users can override by creating ~/.serverherald/templates/templatename
+        """
+        template_dir = os.path.join(os.path.expanduser('~/.serverherald'),
+                                    'templates')
+        if os.path.isfile(os.path.join(template_dir, templatename)):
+            template_env = Environment(loader=FileSystemLoader(template_dir))
+            template = template_env.get_template(templatename)
+            return template.render(context)
+        else:
+            template = self.template_env.get_template(templatename)
+            return template.render(context)

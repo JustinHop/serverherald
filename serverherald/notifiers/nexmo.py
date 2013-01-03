@@ -32,17 +32,13 @@ class ServerHeraldNotifyNexmo(ServerHeraldNotifyBase):
                 print message
                 sys.exit(1)
 
-    def get_message(self, context):
-        template = self.template_env.get_template('sms')
-        return template.render(context)
-
     def notify(self, context):
         url = 'https://rest.nexmo.com/sms/json'
         data = {'api_key': self.config['nexmo'].get('apikey'),
                 'api_secret': self.config['nexmo'].get('apisecret'),
                 'from': self.config['nexmo'].get('from'),
                 'to': self.config['nexmo'].get('to'),
-                'text': self.get_message(context)}
+                'text': self.render_template('sms', context)}
 
         r = requests.post(url, data=data)
 

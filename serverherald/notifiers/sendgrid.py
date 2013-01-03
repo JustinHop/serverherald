@@ -32,7 +32,7 @@ class ServerHeraldNotifySendgrid(ServerHeraldNotifyEmail):
                 'to': self.get_recipients(),
                 'from': self.config['email'].get('from'),
                 'subject': self.get_subject(),
-                'text': self.get_message(context)}
+                'text': self.render_template('message', context)}
 
         r = requests.post(url, data=data)
 
