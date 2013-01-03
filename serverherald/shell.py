@@ -29,7 +29,7 @@ from email.mime.text import MIMEText
 
 """ Want a new notification type?
 1. Make a new python file in notifiers/
-i2. Subclass ServerHeraldNotifyBase
+2. Subclass ServerHeraldNotifyBase
 3. Override notify() and validate_config() as needed.
 4. Import it notifiers/__init__.py.
 5. Add a new notification type keyword by appending to the notifiers dict in
