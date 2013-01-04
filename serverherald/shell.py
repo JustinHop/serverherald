@@ -97,8 +97,7 @@ class ServerHerald:
         self.logger.setLevel(logging.INFO)
         log_file = os.path.expanduser('~/.serverherald/serverherald.log')
         fh = logging.FileHandler(log_file)
-
-        fmt = '%(asctime)s %(name)s[%(process)d]: %(levelname)s %(message)s'
+        fmt = '%(asctime)s %(name)s[%(process)d] [%(levelname)s] %(message)s'
         datefmt = '%b %d %H:%M:%S'
         formatter = logging.Formatter(fmt, datefmt)
         fh.setFormatter(formatter)
