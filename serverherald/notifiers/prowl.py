@@ -13,13 +13,12 @@ class ServerHeraldNotifyProwl(ServerHeraldNotifyBase):
         ServerHeraldNotifyBase.validate_config(self)
 
         # Prowl requires an API key
-        prowlconfig = self.config.get('prowl')
-        if not prowlconfig:
+        if not self.config_has('prowl'):
             print ('`prowl` notification type requires a Prowl API key to be '
                    'specified in the config file.')
             sys.exit(1)
 
-        if not prowlconfig.get('apikey'):
+        if not self.config_has('prowl', 'apikey'):
             print 'Prowl requires an API key in the config file'
             sys.exit(1)
 
@@ -27,8 +26,8 @@ class ServerHeraldNotifyProwl(ServerHeraldNotifyBase):
         """Send message notification"""
         url = 'https://api.prowlapp.com/publicapi/add'
 
-        data = {'apikey': self.config_get('prowl', 'apikey'),
-                'priority': self.config_get('prowl', 'priority', 0),
+        data = {'apikey': self.config('prowl', 'apikey'),
+                'priority': self.config('prowl', 'priority', 0),
                 'application': 'Server Herald',
                 'event': 'New Server',
                 'description': self.render_template('prowl', context)}

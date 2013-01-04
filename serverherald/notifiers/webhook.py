@@ -14,19 +14,18 @@ class ServerHeraldNotifyWebhook(ServerHeraldNotifyBase):
         ServerHeraldNotifyBase.validate_config(self)
 
         # Webhook requires a URL
-        webhook = self.config.get('webhook')
-        if not webhook:
+        if not self.config_has('webhook'):
             print ('`webhook` notification type requires a URL to be '
                    'specified in the config file.')
             sys.exit(1)
 
-        if not webhook.get('url'):
+        if not self.config_has('webhook', 'url'):
             print 'Webhook requires a URL in the config file'
             sys.exit(1)
 
     def notify(self, context):
         """Send HTTP(S) notification"""
-        url = self.config_get('webhook', 'url')
+        url = self.config('webhook', 'url')
         response = requests.post(url,
                                  data=json.dumps(
                                      self.render_template('webhook',

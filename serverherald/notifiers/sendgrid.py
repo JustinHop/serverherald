@@ -13,27 +13,26 @@ class ServerHeraldNotifySendgrid(ServerHeraldNotifyEmail):
         ServerHeraldNotifyEmail.validate_config(self)
 
         # Sendgrid requires an API key and API username
-        sgconfig = self.config.get('sendgrid')
-        if not sgconfig:
+        if not self.config_has('sendgrid'):
             print ('`sendgrid` notification type requires an API username'
                    ' and an API key to be specified in the config file.')
             sys.exit(1)
 
-        if not sgconfig.get('apiuser'):
+        if not self.config_has('sendgrid', 'apiuser'):
             print 'Sendgrid requires a domain name in the config file.'
             sys.exit(1)
 
-        if not sgconfig.get('apikey'):
+        if not self.config_has('sendgrid', 'apikey'):
             print 'Sendgrid requires an API key in the config file'
             sys.exit(1)
 
     def notify(self, context):
         """Send email notification"""
         url = 'https://sendgrid.com/api/mail.send.json'
-        data = {'api_user': self.config_get('sendgrid', 'apiuser'),
-                'api_key': self.config_get('sendgrid', 'apikey'),
+        data = {'api_user': self.config('sendgrid', 'apiuser'),
+                'api_key': self.config('sendgrid', 'apikey'),
                 'to': self.get_recipients(),
-                'from': self.config_get('email', 'from'),
+                'from': self.config('email', 'from'),
                 'subject': self.get_subject(),
                 'text': self.render_template('message', context)}
 

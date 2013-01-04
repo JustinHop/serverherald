@@ -14,8 +14,7 @@ class ServerHeraldNotifyTwilio(ServerHeraldNotifyBase):
 
         # Twilio requires an Account SID, a token, a from, and a to phone
         # number
-        tconfig = self.config.get('twilio')
-        if not tconfig:
+        if not self.config_has('twilio'):
             print ('`twilio` notification type requires a Twilio Account SID'
                    ', a token, a recipient and a sending phone number to be '
                    'specified in the config file.')
@@ -30,7 +29,7 @@ class ServerHeraldNotifyTwilio(ServerHeraldNotifyBase):
                    'file')}
 
         for field, message in required_fields.iteritems():
-            if not tconfig.get(field):
+            if not self.config_has('twilio', field):
                 print message
                 sys.exit(1)
 
@@ -38,15 +37,15 @@ class ServerHeraldNotifyTwilio(ServerHeraldNotifyBase):
         """Send SMS notification"""
         url = ('https://api.twilio.com/2010-04-01/Accounts'
                '/%s/SMS/Messages.json' %
-               self.config_get('twilio', 'accountsid'))
-        data = {'From': self.config_get('twilio', 'from'),
-                'To': self.config_get('twilio', 'to'),
+               self.config('twilio', 'accountsid'))
+        data = {'From': self.config('twilio', 'from'),
+                'To': self.config('twilio', 'to'),
                 'Body': self.render_template('sms', context)}
 
         response = requests.post(url, data=data,
-                                 auth=(self.config_get('twilio',
-                                                       'accountsid'),
-                                       self.config_get('twilio', 'token')))
+                                 auth=(self.config('twilio',
+                                                   'accountsid'),
+                                       self.config('twilio', 'token')))
 
         if response.status_code not in [200, 201]:
             print 'Twilio API Error: (%d) %s' % (response.status_code,
