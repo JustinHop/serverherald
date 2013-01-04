@@ -41,7 +41,33 @@ from email.mime.text import MIMEText
 import serverherald.notifiers
 
 
-class ServerHerald:
+class ServerHeraldLogger(object):
+    def info(self, string):
+        pass
+
+    def warning(self, string):
+        pass
+
+    def error(self, string):
+        pass
+
+    def logger(self, enabled=True):
+        if enabled:
+            logger = logging.getLogger('serverherald')
+            logger.setLevel(logging.INFO)
+            log_file = os.path.expanduser('~/.serverherald/serverherald.log')
+            fh = logging.FileHandler(log_file)
+            fmt = '%(asctime)s %(name)s[%(process)d] [%(levelname)s] %(message)s'
+            datefmt = '%b %d %H:%M:%S'
+            formatter = logging.Formatter(fmt, datefmt)
+            fh.setFormatter(formatter)
+            logger.addHandler(fh)
+            return logger
+        else:
+            return self
+
+
+class ServerHerald(object):
 
     """Class for querying current cloud servers and sending
     notifications for new servers
@@ -93,15 +119,8 @@ class ServerHerald:
                    (getpass.getuser(), os.path.dirname(test_file)))
             sys.exit(1)
 
-        self.logger = logging.getLogger('serverherald')
-        self.logger.setLevel(logging.INFO)
-        log_file = os.path.expanduser('~/.serverherald/serverherald.log')
-        fh = logging.FileHandler(log_file)
-        fmt = '%(asctime)s %(name)s[%(process)d] [%(levelname)s] %(message)s'
-        datefmt = '%b %d %H:%M:%S'
-        formatter = logging.Formatter(fmt, datefmt)
-        fh.setFormatter(formatter)
-        self.logger.addHandler(fh)
+        logger = ServerHeraldLogger()
+        self.logger = logger.logger(self.config.get('log'))
 
         self.lock_file = '%s/lock' % local_dir
 
