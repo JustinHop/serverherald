@@ -239,7 +239,7 @@ class ServerHerald:
                                    'username': username, 'region': region}
 
                         self.logger.info('New Server: Hostname: (%s) IPs: (%s)'
-                                         % (context['server']['name'],
+                                         % (context['server'].name,
                                             context['server_ips']))
                         new_servers += 1
                         if not self.silent:
