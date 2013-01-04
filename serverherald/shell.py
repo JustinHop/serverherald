@@ -25,6 +25,7 @@ import argparse
 import pyrax
 import json
 import getpass
+import dateutil.parser
 from email.mime.text import MIMEText
 
 """ Want a new notification type?
@@ -125,11 +126,45 @@ class ServerHerald:
             with open(servers_file) as f:
                 last_servers = json.load(f)
         servers = {}
+
+        auth_file = os.path.expanduser('~/.serverherald/auth.json')
+        if not os.path.isfile(auth_file):
+            auth_details = {}
+        else:
+            with open(auth_file) as f:
+                auth_details = json.load(f)
+
         for username, settings in self.config['accounts'].iteritems():
             endpoint = settings.get('endpoint', 'US')
             if endpoint == 'LON':
                 pyrax.default_region = 'LON'
-            pyrax.set_credentials(username, settings.get('apikey'))
+
+            if username in auth_details:
+                user_auth_details = auth_details[username]
+                pyrax.identity.username = username
+                pyrax.identity.api_key = settings.get('apikey')
+                pyrax.identity.token = user_auth_details.get('token')
+                pyrax.identity.expires = dateutil.parser.parse(
+                    user_auth_details.get('expires'))
+                pyrax.identity.tenant_id = user_auth_details.get('tenant_id')
+                pyrax.identity.tenant_name = (user_auth_details.
+                                              get('tenant_name'))
+                pyrax.identity.services = user_auth_details.get('services')
+                pyrax.identity.user = user_auth_details.get('user')
+                pyrax.identity.authenticated = True
+            else:
+                pyrax.set_credentials(username, settings.get('apikey'))
+                if pyrax.identity.authenticated:
+                    auth_details[username] = {
+                        'token': pyrax.identity.token,
+                        'expires': pyrax.identity.expires.isoformat(),
+                        'tenant_id': pyrax.identity.tenant_id,
+                        'tenant_name': pyrax.identity.tenant_name,
+                        'services': pyrax.identity.services,
+                        'user': pyrax.identity.user}
+                    with open(auth_file, 'w+') as f:
+                        json.dump(auth_details, f)
+
             if pyrax.identity.auth_endpoint == pyrax.identity.uk_auth_endpoint:
                 regions = ['LON']
             else:
@@ -177,6 +212,12 @@ class ServerHerald:
                                    'server_ips_list': public_ips,
                                    'username': username, 'region': region}
                         self.notifier.notify(context)
+
+                if cs.client.auth_token != pyrax.identity.token:
+                    pyrax.identity.token = cs.client.auth_token
+                    auth_details[username]['token'] = cs.client.auth_token
+                    with open(auth_file, 'w+') as f:
+                        json.dump(auth_details, f)
 
         with open(servers_file, 'wb+') as f:
             json.dump(servers, f)
