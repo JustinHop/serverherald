@@ -26,6 +26,7 @@ import pyrax
 import json
 import getpass
 import dateutil.parser
+import logging
 from email.mime.text import MIMEText
 
 """ Want a new notification type?
@@ -92,6 +93,17 @@ class ServerHerald:
                    (getpass.getuser(), os.path.dirname(test_file)))
             sys.exit(1)
 
+        self.logger = logging.getLogger('serverherald')
+        self.logger.setLevel(logging.INFO)
+        log_file = os.path.expanduser('~/.serverherald/serverherald.log')
+        fh = logging.FileHandler(log_file)
+
+        fmt = '%(asctime)s %(name)s[%(process)d]: %(levelname)s %(message)s'
+        datefmt = '%b %d %H:%M:%S'
+        formatter = logging.Formatter(fmt, datefmt)
+        fh.setFormatter(formatter)
+        self.logger.addHandler(fh)
+
         self.lock_file = '%s/lock' % local_dir
 
         if os.path.isfile(self.lock_file):
@@ -103,13 +115,20 @@ class ServerHerald:
                     if 'python' in exe:
                         print ('serverherald[%s] is currently running' %
                                lock_pid)
+                        self.logger.warning('serverherald[%s] is currently '
+                                            'running' % lock_pid)
                         sys.exit(1)
                     else:
                         print 'serverherald pid file found, but is not running'
+                        self.logger.warning('serverherald pid file found, but '
+                                            'is not running')
                         os.unlink(self.lock_file)
             else:
                 print 'serverherald lockfile found'
                 print 'serverherald cannot check the pid on this OS'
+                self.logger.error('serverherald lockfile found')
+                self.logger.error('serverherald cannot check the pid on this '
+                                  'OS')
                 sys.exit(1)
 
         with open(self.lock_file, 'w+') as f:
@@ -119,6 +138,9 @@ class ServerHerald:
         """Check all regions for an Auth endpoint querying for all servers,
         sending notifications for new servers in ACTIVE status
         """
+
+        self.logger.info('Starting to look for new servers')
+
         servers_file = os.path.expanduser('~/.serverherald/servers.json')
         if not os.path.isfile(servers_file):
             last_servers = {}
@@ -134,8 +156,12 @@ class ServerHerald:
             with open(auth_file) as f:
                 auth_details = json.load(f)
 
+        new_servers = 0
         for username, settings in self.config['accounts'].iteritems():
+            self.logger.info('Username: %s' % username)
+
             endpoint = settings.get('endpoint', 'US')
+            self.logger.info('Endpoint: %s' % endpoint)
             if endpoint == 'LON':
                 pyrax.default_region = 'LON'
 
@@ -171,6 +197,7 @@ class ServerHerald:
                 regions = ['DFW', 'ORD']
 
             for region in regions:
+                self.logger.info('Region: %s' % region)
                 try:
                     cs = pyrax.connect_to_cloudservers(region)
                 except:
@@ -189,8 +216,7 @@ class ServerHerald:
                     servers[username].append(id)
 
                     if (status == 'ACTIVE'
-                            and id not in last_servers[username]
-                            and not self.silent):
+                            and id not in last_servers[username]):
                         public_ips = server.addresses.get('public')
                         if public_ips:
                             ips = ', '.join([ver['addr'] for ver in
@@ -211,7 +237,13 @@ class ServerHerald:
                                    'flavor': flavor, 'server_ips': ips,
                                    'server_ips_list': public_ips,
                                    'username': username, 'region': region}
-                        self.notifier.notify(context)
+
+                        self.logger.info('New Server: Hostname: (%s) IPs: (%s)'
+                                         % (context['server']['name'],
+                                            context['server_ips']))
+                        new_servers += 1
+                        if not self.silent:
+                            self.notifier.notify(context)
 
                 if cs.client.auth_token != pyrax.identity.token:
                     pyrax.identity.token = cs.client.auth_token
@@ -223,6 +255,8 @@ class ServerHerald:
             json.dump(servers, f)
 
         os.unlink(self.lock_file)
+        self.logger.info('Completed looking for new servers')
+        self.logger.info('New servers found: %d' % new_servers)
 
 
 def main():
