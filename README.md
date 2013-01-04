@@ -177,6 +177,25 @@ Custom HTTP or HTTPS webhook notifications:
       myclouduser1:
         apikey: db2132af5dc3125f9c688661fefab621
 
+### Securing Sensitive Data in Configuration Files
+
+serverherald supports storing and retrieving sensitive values from keyrings
+so that they do not have to be stored in a human-readable text file. They key
+word `USE_KEYRING` will signal serverherald that it needs to lookup the value.
+
+If the secret has not been stored, serverherald will prompt the user for the
+initial value.
+
+Here's an example configuration that protects the Prowl API key:
+
+    method: prowl
+	prowl:
+	  apikey: USE_KEYRING
+	accounts:
+	  myclouduser1:
+	    apikey: db2132af5dc3125f9c688661fefab621
+
+
 
 ## Deployment
 

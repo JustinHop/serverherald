@@ -1,3 +1,4 @@
+import sys
 from serverherald.notifiers.base import ServerHeraldNotifyBase
 
 
@@ -20,10 +21,11 @@ class ServerHeraldNotifyEmail(ServerHeraldNotifyBase):
             sys.exit(1)
 
     def get_subject(self):
-        return self.config['email'].get('subject',
-                                        'New Cloud Server Online')
+        """Set the email subject based on config, fall back to default"""
+        return self.config_get('email', 'subject', 'New Cloud Server Online')
 
     def get_recipients(self):
+        """Convert recipients from the config file into a list, if needed"""
         if not isinstance(self.config['email']['to'], list):
             self.config['email']['to'] = [self.config['email']['to']]
         return self.config['email']['to']

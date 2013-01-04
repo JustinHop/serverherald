@@ -1,4 +1,3 @@
-import os
 import sys
 import requests
 
@@ -9,6 +8,8 @@ class ServerHeraldNotifyProwl(ServerHeraldNotifyBase):
     """Class for sending push notifications via Prowl API"""
 
     def validate_config(self):
+        """Verify that all required config settings are present"""
+
         ServerHeraldNotifyBase.validate_config(self)
 
         # Prowl requires an API key
@@ -23,15 +24,16 @@ class ServerHeraldNotifyProwl(ServerHeraldNotifyBase):
             sys.exit(1)
 
     def notify(self, context):
-        message = self.render_template('prowl', context)
+        """Send message notification"""
         url = 'https://api.prowlapp.com/publicapi/add'
-        r = requests.post(url,
-                          data={'apikey': self.config['prowl'].get('apikey'),
-                                'priority':
-                                self.config['prowl'].get('priority', 0),
-                                'application': 'Server Herald',
-                                'event': 'New Server',
-                                'description': self.render_template('prowl',
-                                                                    context)})
-        if r.status_code != 200:
-            print 'Prowl API Error: (%d) %s' % (r.status_code, r.text)
+
+        data = {'apikey': self.config_get('prowl', 'apikey'),
+                'priority': self.config_get('prowl', 'priority', 0),
+                'application': 'Server Herald',
+                'event': 'New Server',
+                'description': self.render_template('prowl', context)}
+
+        response = requests.post(url, data=data)
+        if response.status_code != 200:
+            print 'Prowl API Error: (%d) %s' % (response.status_code,
+                                                response.text)
