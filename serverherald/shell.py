@@ -258,6 +258,9 @@ class ServerHerald:
         self.logger.info('Completed looking for new servers')
         self.logger.info('New servers found: %d' % new_servers)
 
+    def cleanup(self):
+        os.unlink(self.lock_file)
+
 
 def main():
     description = """serverherald announces when new Rackspace NextGen cloud
@@ -316,7 +319,12 @@ server become ACTIVE.
                        notifiers[config['method']])
 
     herald = ServerHerald(config, notifier=notifier, silent=args.silent)
-    herald.check_servers()
+    try:
+        herald.check_servers()
+    except KeyboardInterrupt:
+        print 'Stopping...'
+        herald.logger.warning('Stopped by keyboard interrupt')
+        herald.cleanup()
 
 if __name__ == '__main__':
     main()
