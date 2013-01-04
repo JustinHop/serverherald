@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 
-dependencies = ['hgtools', 'keyring', 'PyYAML', 'requests', 'pyrax', 'jinja2']
+dependencies = ['hgtools', 'jinja2', 'keyring', 'pyrax', 'python-dateutil',
+                'PyYAML', 'requests']
 
 setup(
     name='serverherald',
