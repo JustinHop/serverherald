@@ -30,9 +30,10 @@ class ServerHeraldNotifyMailgun(ServerHeraldNotifyEmail):
         """Send email notification"""
         url = ('https://api.mailgun.net/v2/%s/messages' %
                self.config('mailgun', 'domain'))
-        data = {'token': app_apikey,
-                'user': self.config('pushover', 'apikey'),
-                'message': self.render_template('sms', context)}
+        data = {'from': self.config('email', 'from'),
+                'to': self.get_recipients(),
+                'subject': self.get_subject(),
+                'text': self.render_template('message', context)}
         response = requests.post(url, data=data,
                                  auth=('api', self.config('mailgun',
                                        'apikey')))
