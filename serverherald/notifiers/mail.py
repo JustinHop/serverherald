@@ -11,21 +11,21 @@ class ServerHeraldNotifyEmail(ServerHeraldNotifyBase):
         """Email notifications require a `to` and `from` address"""
         ServerHeraldNotifyBase.validate_config(self)
 
-        email = self.config.get('email')
-        if not email or not email.get('to'):
+        if not self.config_has('email') or self.config_has('email', 'to'):
             print 'There are no recipient email addresses in the config file'
             sys.exit(1)
 
-        if not email.get('from'):
+        if not self.config_has('email', 'from'):
             print 'A from address has not been specified in the config file'
             sys.exit(1)
 
     def get_subject(self):
         """Set the email subject based on config, fall back to default"""
-        return self.config_get('email', 'subject', 'New Cloud Server Online')
+        return self.config('email', 'subject', 'New Cloud Server Online')
 
     def get_recipients(self):
         """Convert recipients from the config file into a list, if needed"""
-        if not isinstance(self.config['email']['to'], list):
-            self.config['email']['to'] = [self.config['email']['to']]
-        return self.config['email']['to']
+        recipients = self.config('email', 'to')
+        if not isinstance(recipients, list):
+            recipients = [recipients]
+        return recipients

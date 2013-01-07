@@ -1,8 +1,8 @@
-import getpass
-import keyring
 import os
 import sys
 from jinja2 import Environment, PackageLoader, FileSystemLoader
+
+import serverherald.utils
 
 
 class ServerHeraldNotifyBase(object):
@@ -17,45 +17,32 @@ class ServerHeraldNotifyBase(object):
 
         """
 
-        self.config = config
+        self._config = config
 
         self.validate_config()
         self.template_env = Environment(loader=PackageLoader('serverherald',
                                         'templates'))
 
-    def config_get(self, section, key, default=None):
-        """Return value that matches key in config settings.
-        Reference keyring if needed.
-        """
-        config_section = self.config.get(section)
-        if config_section.get(key, default) == 'USE_KEYRING':
-            keyring_path = section + '/' + key
-            keyring_value = keyring.get_password('serverherald', keyring_path)
-            if keyring_value is None:
-                print 'The keyring storage mechanism has been selected for' \
-                      '%s but the keyring is empty' % keyring_path
+    def config(self, section, key=None, default=None):
+        """Return the section or section/key value"""
+        return serverherald.utils.config_get(self._config, section, key,
+                                             default)
 
-                while 1:
-                    user_value = getpass.getpass("%s: " % key)
-                    if user_value != '':
-                        keyring.set_password('serverherald', keyring_path,
-                                             user_value)
-                        break
-                return user_value
-            else:
-                return keyring_value
-        else:
-            return config_section.get(key, default)
+    def config_has(self, section, key=None):
+        """Return true if the section/key pair exists"""
+        return serverherald.utils.config_has(self._config, section, key)
 
     def validate_config(self):
         """Load the config.yaml file and validate it's contents within
         reason"""
 
+        """
         if not self.config:
             print 'The config file is empty and must be populated'
             sys.exit(1)
+        """
 
-        accounts = self.config.get('accounts')
+        accounts = self.config('accounts')
         if not accounts or not accounts.keys():
             print 'There are no accounts configured in the config file'
             sys.exit(1)

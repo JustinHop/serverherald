@@ -11,7 +11,7 @@ class ServerHeraldNotifySMTP(ServerHeraldNotifyEmail):
         """Send email notification"""
         email = MIMEText(self.render_template('message', context))
         email['Subject'] = self.get_subject()
-        email['From'] = self.config_get('email', 'from')
+        email['From'] = self.config('email', 'from')
         email['To'] = ', '.join(self.get_recipients())
         sender = smtplib.SMTP()
         sender.connect()

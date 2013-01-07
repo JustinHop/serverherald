@@ -13,8 +13,7 @@ class ServerHeraldNotifyNexmo(ServerHeraldNotifyBase):
 
         # Nexmo requires an API key, API secret, a from and a to phone
         # number
-        nconfig = self.config.get('nexmo')
-        if not nconfig:
+        if not self.config_has('nexmo'):
             print ('`nexmo` notification type requires a nexmo API key, API '
                    'secret, a recipient and a sending phone number to be '
                    'specified in the config file.')
@@ -28,17 +27,17 @@ class ServerHeraldNotifyNexmo(ServerHeraldNotifyBase):
             'to': 'nexmo requires a recipient phone number in the config file'}
 
         for field, message in required_fields.iteritems():
-            if not nconfig.get(field):
+            if not self.config_has('nexmo', field):
                 print message
                 sys.exit(1)
 
     def notify(self, context):
         """Send SMS notification"""
         url = 'https://rest.nexmo.com/sms/json'
-        data = {'api_key': self.config_get('nexmo', 'apikey'),
-                'api_secret': self.config_get('nexmo', 'apisecret'),
-                'from': self.config_get('nexmo', 'from'),
-                'to': self.config_get('nexmo', 'to'),
+        data = {'api_key': self.config('nexmo', 'apikey'),
+                'api_secret': self.config('nexmo', 'apisecret'),
+                'from': self.config('nexmo', 'from'),
+                'to': self.config('nexmo', 'to'),
                 'text': self.render_template('sms', context)}
 
         response = requests.post(url, data=data)

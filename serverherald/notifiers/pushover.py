@@ -13,13 +13,12 @@ class ServerHeraldNotifyPushover(ServerHeraldNotifyBase):
         ServerHeraldNotifyBase.validate_config(self)
 
         # Pushover requires an API key
-        pushoverconfig = self.config.get('pushover')
-        if not pushoverconfig:
+        if not self.config_has('pushover'):
             print ('`pushover` notification type requires a Pushover API '
                    'key to be specified in the config file.')
             sys.exit(1)
 
-        if not pushoverconfig.get('apikey'):
+        if not self.config_has('pushover', 'apikey'):
             print 'Pushover requires an API key in the config file'
             sys.exit(1)
 
@@ -28,7 +27,7 @@ class ServerHeraldNotifyPushover(ServerHeraldNotifyBase):
         app_apikey = 'oPlGyPwBxgd5EicP1qocGV6bYi5RgF'
         url = 'https://api.pushover.net/1/messages.json'
         data = {'token': app_apikey,
-                'user': self.config_get('pushover', 'apikey'),
+                'user': self.config('pushover', 'apikey'),
                 'message': self.render_template('sms', context)}
         response = requests.post(url, data=data)
         if response.status_code != 200:
