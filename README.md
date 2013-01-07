@@ -98,7 +98,7 @@ Email notifications via Mailgun:
     email:
       to:
         - you@yourcompany.com
-    from: Server Herald <postmaster@mydomain.mailgun.org>
+      from: Server Herald <postmaster@mydomain.mailgun.org>
     accounts:
       myclouduser1:
         apikey: db2132af5dc3125f9c688661fefab621

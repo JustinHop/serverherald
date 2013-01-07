@@ -11,7 +11,7 @@ class ServerHeraldNotifyEmail(ServerHeraldNotifyBase):
         """Email notifications require a `to` and `from` address"""
         ServerHeraldNotifyBase.validate_config(self)
 
-        if not self.config_has('email') or self.config_has('email', 'to'):
+        if not self.config_has('email') or not self.config_has('email', 'to'):
             print 'There are no recipient email addresses in the config file'
             sys.exit(1)
 
