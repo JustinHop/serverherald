@@ -37,8 +37,8 @@ class ServerHeraldLogger(object):
             logger.setLevel(logging.INFO)
             log_file = os.path.expanduser('~/.serverherald/serverherald.log')
             fh = logging.FileHandler(log_file)
-            fmt = '%(asctime)s %(name)s[%(process)d] [%(levelname)s] ' \
-                  '%(message)s'
+            fmt = ('%(asctime)s %(name)s[%(process)d] [%(levelname)s] '
+                   '%(message)s')
             datefmt = '%b %d %H:%M:%S'
             formatter = logging.Formatter(fmt, datefmt)
             fh.setFormatter(formatter)
@@ -65,8 +65,8 @@ def config_get(config, section, key=None, default=None):
         keyring_path = section + '/' + key
         keyring_value = keyring.get_password('serverherald', keyring_path)
         if keyring_value is None:
-            print 'The keyring storage mechanism has been selected for' \
-                  '%s but the keyring is empty' % keyring_path
+            print ('The keyring storage mechanism has been selected for'
+                   '%s but the keyring is empty' % keyring_path)
 
             while 1:
                 user_value = getpass.getpass("%s: " % key)
