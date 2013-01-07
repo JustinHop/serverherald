@@ -62,7 +62,7 @@ def config_get(config, section, key=None, default=None):
     if not key:
         return config_section
     if config_section.get(key, default) == 'USE_KEYRING':
-        keyring_path = section + '/' + key
+        keyring_path = '%s/%s' % (section, key)
         keyring_value = keyring.get_password('serverherald', keyring_path)
         if keyring_value is None:
             print ('The keyring storage mechanism has been selected for'
