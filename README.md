@@ -233,5 +233,5 @@ the results from the previous execution.
 
 ## Developers
 
-1. [Matt Martz](mailto:matt.martz@rackspace.com) - Primary Developer
-1. [Caleb Groom](mailto:cgroom@rackspace.com)
+1. [Matt Martz](https://github.com/sivel) - Primary Developer
+1. [Caleb Groom](https://github.com/calebgroom)
