@@ -51,7 +51,7 @@ Install python-virtualenv:
 
 ### serverherald Installation
 
-    $ git clone /change/this/later.git
+    $ git clone git+https://github.com/rackerlabs/serverherald.git
     $ virtualenv ~/venv
     $ source ~/venv/bin/activate
     $ python setup.py install
@@ -189,11 +189,11 @@ initial value.
 Here's an example configuration that protects the Prowl API key:
 
     method: prowl
-	prowl:
-	  apikey: USE_KEYRING
-	accounts:
-	  myclouduser1:
-	    apikey: db2132af5dc3125f9c688661fefab621
+    prowl:
+      apikey: USE_KEYRING
+    accounts:
+      myclouduser1:
+        apikey: db2132af5dc3125f9c688661fefab621
 
 
 

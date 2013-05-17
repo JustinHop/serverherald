@@ -19,5 +19,5 @@ setup(
     },
     license='Apache License (2.0)',
     classifiers=["Programming Language :: Python"],
-    url='https://changethis.com',
+    url='https://github.com/rackerlabs/serverherald',
 )
