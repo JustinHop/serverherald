@@ -5,8 +5,11 @@ dependencies = ['hgtools', 'jinja2', 'keyring', 'pyrax', 'python-dateutil',
 
 setup(
     name='serverherald',
-    description='Notification utility that announces new servers',
-    keywords='rackspace cloud',
+    description=('serverherald announces when a new Rackspace OpenStack Cloud '
+                 'Server becomes ACTIVE by polling the API. It supports '
+                 'multiple notification methods, with email being the most '
+                 'popular.'),
+    keywords='rackspace cloud openstack serverherald',
     version='0.0.1',
     author='Matt Martz',
     author_email='matt.martz@rackspace.com',
