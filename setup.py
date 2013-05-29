@@ -10,7 +10,7 @@ setup(
                  'multiple notification methods, with email being the most '
                  'popular.'),
     keywords='rackspace cloud openstack serverherald',
-    version='0.0.1',
+    version='1.0.0',
     author='Matt Martz',
     author_email='matt.martz@rackspace.com',
     install_requires=dependencies,
