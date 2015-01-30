@@ -18,7 +18,7 @@ import os
 import sys
 import json
 import getpass
-import pprint
+# import pprint
 import pickle
 
 import pyrax
@@ -200,7 +200,11 @@ class ServerHerald(object):
                 except:
                     continue
                 flavors = cs.flavors.list()
+                for flavor in flavors:
+                    self.logger.info("Flavor: " + flavor.name)
                 images = cs.images.list()
+                for image in images:
+                    self.logger.info("Image: " + image.name)
                 for server in cs.servers.list():
                     id = server.id
                     status = server.status
@@ -221,9 +225,10 @@ class ServerHerald(object):
                         else:
                             ips = 'None'
                         try:
-                            image = filter(lambda x: x.id ==
-                                           server.image['id'],
-                                           images)[0].name
+                            # image = filter(lambda x: x.id ==
+                            #                server.image['id'],
+                            #                images)[0].name
+                            image = server.image
                         except IndexError:
                             image = cs.images.get(server.image['id']).name
 
@@ -232,7 +237,7 @@ class ServerHerald(object):
                                 server.flavor['id']), flavors)[0].name
                         except ValueError:
                             self.logger.warning("ValueError on server flavor")
-                            flavor = server.flavor['id']
+                            flavor = server.flavor
 
                         context = {'id': id, 'status': status,
                                    'server': server, 'server_image': image,

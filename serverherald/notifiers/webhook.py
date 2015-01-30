@@ -26,10 +26,12 @@ class ServerHeraldNotifyWebhook(ServerHeraldNotifyBase):
     def notify(self, context):
         """Send HTTP(S) notification"""
         url = self.config('webhook', 'url')
+        headers = {'content-type': 'application/json'}
         response = requests.post(url,
                                  data=json.dumps(
                                      self.render_template('webhook',
-                                                          context)))
+                                                          context)),
+                                 headers=headers)
         if response.status_code != 200:
             print 'Webhook Error: (%d) %s' % (response.status_code,
                                               response.text)
