@@ -226,8 +226,13 @@ class ServerHerald(object):
                                            images)[0].name
                         except IndexError:
                             image = cs.images.get(server.image['id']).name
-                        flavor = filter(lambda x: int(x.id) == int(
-                                        server.flavor['id']), flavors)[0].name
+
+                        try:
+                            flavor = filter(lambda x: int(x.id) == int(
+                                server.flavor['id']), flavors)[0].name
+                        except ValueError:
+                            self.logger.warning("ValueError on server flavor")
+                            flavor = server.flavor['id']
 
                         context = {'id': id, 'status': status,
                                    'server': server, 'server_image': image,

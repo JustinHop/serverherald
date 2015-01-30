@@ -96,6 +96,8 @@ server become ACTIVE.
         print 'Stopping...'
         herald.logger.warning('Stopped by keyboard interrupt')
         herald.cleanup()
+    finally:
+        herald.cleanup()
 
 if __name__ == '__main__':
     main()
