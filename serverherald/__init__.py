@@ -18,6 +18,8 @@ import os
 import sys
 import json
 import getpass
+import pprint
+import pickle
 
 import pyrax
 import dateutil.parser
@@ -138,12 +140,17 @@ class ServerHerald(object):
                 last_servers = json.load(f)
         servers = {}
 
-        auth_file = os.path.expanduser('~/.serverherald/auth.json')
+        auth_file = os.path.expanduser('~/.serverherald/auth.pickle')
         if not os.path.isfile(auth_file):
             auth_details = {}
         else:
             with open(auth_file) as f:
-                auth_details = json.load(f)
+                try:
+                    auth_details = pickle.load(f)
+                except EOFError:
+                    self.logger.warning("Could not unpickle auth file")
+                    os.remove(auth_file)
+                    auth_details = {}
 
         new_servers = 0
         for username, settings in self.config('accounts').iteritems():
@@ -178,12 +185,13 @@ class ServerHerald(object):
                         'services': pyrax.identity.services,
                         'user': pyrax.identity.user}
                     with open(auth_file, 'w+') as f:
-                        json.dump(auth_details, f)
+                        try:
+                            pickle.dump(auth_details, f)
+                        except pyrax.exceptions.NoClientForService:
+                            self.logger.warning("Failed to dump auth_details")
+                            os.remove(auth_file)
 
-            if pyrax.identity.auth_endpoint == pyrax.identity.uk_auth_endpoint:
-                regions = ['LON']
-            else:
-                regions = ['DFW', 'ORD']
+            regions = ['DFW', 'ORD']
 
             for region in regions:
                 self.logger.info('Region: %s' % region)
