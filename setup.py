@@ -10,9 +10,9 @@ setup(
                  'multiple notification methods, with email being the most '
                  'popular.'),
     keywords='rackspace cloud openstack serverherald',
-    version='1.0.0',
-    author='Matt Martz',
-    author_email='matt.martz@rackspace.com',
+    version='1.0.2',
+    author='Justin Hoppensteadt',
+    author_email='hop@crowdrise.com',
     install_requires=dependencies,
     entry_points={'console_scripts':
                   ['serverherald=serverherald.shell:main']},
@@ -22,5 +22,5 @@ setup(
     },
     license='Apache License (2.0)',
     classifiers=["Programming Language :: Python"],
-    url='https://github.com/rackerlabs/serverherald',
+    url='https://github.com/JustinHop/serverherald',
 )

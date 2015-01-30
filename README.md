@@ -4,6 +4,12 @@ serverherald announces when a new Rackspace OpenStack Cloud Server becomes
 ACTIVE by polling the API. It supports multiple notification methods, with
 email being the most popular.
 
+This version has been patched by Justin Hoppensteadt to make it compatible with
+Rackspace OpenStack Cloud again. Also it is now compatible with sending webhooks
+to a python cherrypy server.
+
+Auth caching curently broken.
+
 ## Usage
 
 For your first run, enable the silent switch so that serverherald can learn
